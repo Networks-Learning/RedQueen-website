@@ -1,0 +1,12 @@
+.equal-size {
+    display: flex;
+    flex-direction: row;
+    height: 15em;
+    justify-content: center;
+    align-items: center;
+}
+
+.equal-size svg {
+    height: 100%;
+    width: 100%;
+}

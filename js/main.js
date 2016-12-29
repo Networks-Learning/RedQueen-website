@@ -1,6 +1,6 @@
 var feed_vis = function () {
     /* Visualize the feed of the user. */
-    var feed_length = 10;
+    var feed_length = 25;
     var width = 100, height  = 100;
     var tweet_height = height / (feed_length + 2), tweet_width = 50;
     var tweet_colors = {
@@ -40,7 +40,6 @@ var feed_vis = function () {
                 .attr('y', function (d, i) { return tweet_height * (i + 1); })
                 .attr('width', tweet_width)
                 .attr('height', tweet_height)
-                .attr('transform', 'scale(1)')
                 .attr('opacity', 1.0);
 
             tweets.exit()
@@ -70,26 +69,27 @@ fetch('data/example1.json')
 
     var tweets = [], id = 0;
 
-    var svg = d3.select("#redqueen-demo")
-            .data(tweets)
-            .call(tweet_flow);
+    var feed_length = tweet_flow.feed_length();
 
-    function update_randomly() {
+    function update_randomly(tweets, id, elem_id) {
         var rand = Math.random();
         tweets.unshift({
             id: id,
             source: (rand < 0.25) ? 'user' : 'other'
         });
         id = id + 1;
-        tweets = tweets.slice(0, 10);
-        d3.select("#redqueen-demo")
-                    .data([tweets])
-                    .call(tweet_flow);
+        tweets = tweets.slice(0, feed_length);
+        d3.select('#' + elem_id)
+          .datum(tweets)
+          .call(tweet_flow);
 
-        setTimeout(update_randomly, Math.random() * 500);
+        if (id < 200) {
+            setTimeout(() => { update_randomly(tweets, id, elem_id) }, Math.random() * 1000);
+        }
     }
 
-    update_randomly();
+    update_randomly([], 0, 'feed-1-vis');
+    update_randomly([], 0, 'feed-2-vis');
 });
 
 
