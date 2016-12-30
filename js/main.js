@@ -1,8 +1,8 @@
 var feed_vis = function () {
     /* Visualize the feed of the user. */
-    var feed_length = 25;
-    var width = 100, height  = 100;
-    var tweet_height = height / (feed_length + 2), tweet_width = 50;
+    var feed_length = 10;
+    var width = 100, height = 100;
+    var tweet_height = height / (feed_length + 3), tweet_width = 50;
     var tweet_colors = {
         'user': '#1E90FF',
         'other': '#FF008B'
@@ -44,7 +44,7 @@ var feed_vis = function () {
 
             tweets.exit()
                 .transition()
-                .attr('y', function (d, i) { return tweet_height * (feed_length + 1); })
+                .attr('y', function (d, i) { return tweet_height * (i + 1); })
                 .attr('opacity', 1e-6)
                 .remove();
         });
@@ -54,7 +54,7 @@ var feed_vis = function () {
         if (!arguments.length) return feed_length;
         feed_length = _;
         return tweet_flow;
-    }
+    };
 
     return tweet_flow;
 };
@@ -84,7 +84,8 @@ fetch('data/example1.json')
           .call(tweet_flow);
 
         if (id < 200) {
-            setTimeout(() => { update_randomly(tweets, id, elem_id) }, Math.random() * 1000);
+            setTimeout(function () { update_randomly(tweets, id, elem_id); },
+                       Math.random() * 1000);
         }
     }
 
