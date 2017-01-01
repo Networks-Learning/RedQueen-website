@@ -35,3 +35,18 @@
 .long.vis-aspect {
     padding-top: 33.33%;
 }
+
+svg {
+}
+
+.area-chart {
+    fill: steelblue;
+    shape-rendering: crispEdges;
+}
+
+.axis path, .axis line {
+    fill: none;
+    stroke: #777;
+    /* shape-rendering: crispEdges; */
+}
+
