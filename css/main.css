@@ -29,7 +29,14 @@
 }
 
 .tall.vis-aspect {
-    padding-top: 150%;
+    /* The aspect ratio of this element
+     * should be 2:3, but since the 
+     * padding-top will be a percentage
+     * of the full width (not the 50%),
+     * the padding-top should be half
+     * of its actual value = 1/2 * 3/2
+     */
+    padding-top: 75%;
 }
 
 .long.vis-aspect {
