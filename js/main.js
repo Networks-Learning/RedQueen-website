@@ -1,7 +1,7 @@
 var feed_vis = function () {
     /* Visualize the feed of the user. */
-    var feed_length = 10;
-    var width = 100, height = 100;
+    var feed_length = 25;
+    var width = 100, height = 150;
     var tweet_height = height / (feed_length + 3), tweet_width = 50;
     var tweet_colors = {
         'user': '#1E90FF',
@@ -44,7 +44,7 @@ var feed_vis = function () {
 
             tweets.exit()
                 .transition()
-                .attr('y', function (d, i) { return tweet_height * (i + 1); })
+                .attr('y', function (d, i) { return tweet_height * (i + 2); })
                 .attr('opacity', 1e-6)
                 .remove();
         });
@@ -58,6 +58,67 @@ var feed_vis = function () {
 
     return tweet_flow;
 };
+
+var perf_vis = function () {
+    /* Visualize the performance of one algorithm. */
+    var margins = {
+        left: 10,
+        right: 10,
+        top: 10,
+        bottom: 10
+    };
+
+    var width = 300 - margins.left - margins.right,
+        height = 100 - margins.top - margins.bottom;
+
+    var scaled_final_time = 100;
+
+    var xScale = d3.scaleLinear()
+                    .range([0, width])
+                    .domain([0, scaled_final_time]);
+
+    var yScale = d3.scaleLinear()
+                    .range([height, 0]);
+
+    var area = d3.svg.area()
+                .x(function (d) { return d.time; })
+                .y0(height)
+                .y1(function (d) { return d.rank; });
+
+    function perf_vis(selection) {
+        selection.each(function (ranks, i) {
+
+            /* Add a sole g.chart-container */
+            d3.select(this)
+                .selectAll('g.chart-container')
+                .data([0])
+              .enter()
+                .append('g')
+                .attr('class', 'chart-container')
+                .attr('transform',
+                      'translate(' + margins.left + ',' + margins.right + ')')
+                .append('path')
+                .attr('class', 'area-chart');
+
+            var maxRank = d3.max(ranks, function (d) { return d.rank; });
+            yScale.domain([0, maxRank]);
+
+            var chart = d3.select('path.area-chart')
+                          .datum(ranks)
+                          .attr('d', area);
+        });
+    }
+
+    perf_vis.final_time = function (_) {
+        if (!arguments.length) return scaled_final_time;
+        scaled_final_time = _;
+        xScale = xScale.domain([0, scaled_final_time]);
+        return perf_vis;
+    };
+
+    return perf_vis;
+};
+
 
 fetch('data/example1.json')
 .then(function (resp) {
