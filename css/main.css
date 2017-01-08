@@ -57,3 +57,11 @@ svg {
     /* shape-rendering: crispEdges; */
 }
 
+.red-queen-icon {
+    max-width: 128px;
+}
+
+.red-queen {
+    font-variant: small-caps;
+}
+

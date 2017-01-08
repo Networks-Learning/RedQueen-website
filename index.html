@@ -14,7 +14,7 @@
 </head>
 <body>
   <article>
-    <h1>RedQueen</h1>
+    <h1 class="red-queen">RedQueen</h1>
     <section>
       <h2>Introduction</h2>
 
@@ -22,21 +22,52 @@
         <label class="margin-toggle" for="fig-redqueen">⊕</label>
         <input id="fig-redqueen" class="margin-toggle" type="checkbox">
         <span class="marginnote">
-          <img src="img/red_queen.512.png" alt="RedQueen" icon="" aria="hidden">
+          <img src="img/red_queen.512.png" alt="RedQueen"
+               aria="hidden" class="red-queen-icon">
+        </span>
+
+        Users in social networks whose posts stay at the top of their
+        followers' feeds the longest time are more likely to be noticed. Can
+        we design an online algorithm to help them decide when to post to stay
+        at the top? In this paper, we address this question as a novel optimal
+        control problem for jump stochastic differential equations. For a wide
+        variety of feed dynamics, we show that the optimal broadcasting
+        intensity for any user is surprisingly simple -- it is given by the
+        position of her most recent post on each of her follower's feeds. As a
+        consequence, we are able to develop a simple and highly efficient
+        online algorithm, <em class="red-queen">RedQueen</em>, to sample the optimal times for the user to
+        post. Experiments on both synthetic and real data gathered from Twitter
+        show that our algorithm is able to consistently make a user's posts
+        more visible over time, is robust to volume changes on her followers'
+        feeds, and significantly outperforms the state of the art.
+      </p>
+
+      <p>
+
+      </p>
+
+      <h2>The Algorithm</h2>
+
+      <p>
+
+        $$
+        \overbrace{u(t)}^{\text{Broadcast intensity}} = \sqrt{s/q}\,\underbrace{r(t)}_{\text{Rank in feed}}
+        $$
+
+
+        <label class="margin-toggle" for="eqn-user-rate">⊕</label>
+        <input id="eqn-user-rate" class="margin-toggle" type="checkbox">
+        <span class="marginnote">
         </span>
 
       </p>
 
-      <p>
-      $$
-      u(t) = \sqrt{s/q}\,r(t)
-      $$
-      </p>
+      <h2>Demo</h2>
 
       <figure>
         <label class="margin-toggle" for="redqueen-demo-caption">⊕</label>
         <input id="redqueen-demo-caption" class="margin-toggle" type="checkbox">
-        <span class="marginnote">RedQueen demo</span>
+        <span class="marginnote">Interactive demo</span>
 
         <div class="long vis-aspect">
           <svg id="perf-1-vis" width="100%" class="content" viewBox="0 0 300 100"></svg>
@@ -56,6 +87,18 @@
         </div>
       </figure>
 
+      <h2>The Name <em class="red-queen">RedQueen</em></h2>
+
+      <p>
+        The name is taken from the <a href="https://en.wikipedia.org/wiki/Red_Queen">Red Queen's race</a> incident in <a href="https://en.wikipedia.org/wiki/Lewis_Carroll">Lewis Carroll</a>'s book <a href="https://en.wikipedia.org/wiki/Through_the_Looking-Glass">Through the Looking Glass</a>. In particular, the Queen's quote:
+
+        <div class="epigraph">
+          <blockquote>
+            "Now, here, you see, it takes all the running you can do, to keep in the same place."
+            <footer>Red Queen</footer>
+          </blockquote>
+        </div>
+      </p>
     </section>
 
     <section>
