@@ -65,3 +65,17 @@ svg {
     font-variant: small-caps;
 }
 
+.button-play {
+    color: white;
+    background: rgb(28, 184, 65); /* this is a green */
+}
+
+.button-stop {
+    color: white;
+    background: rgb(202, 60, 60); /* this is a maroon */
+}
+
+.centered {
+    text-align: center;
+}
+.
