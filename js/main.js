@@ -92,10 +92,10 @@ var feed_vis = function () {
 var perf_vis = function () {
     /* Visualize the performance of one algorithm. */
     var margins = {
-        left: 25,
+        left: 50,
         right: 10,
         top: 10,
-        bottom: 25
+        bottom: 50
     };
 
     var width = 300 - margins.left - margins.right,
@@ -120,6 +120,9 @@ var perf_vis = function () {
                     .scale(yScale)
                     .ticks(4);
 
+    var xLabel = 'Time',
+        yLabel = 'Rank';
+
     var area = d3.area()
                 .x(function (d) { return xScale(d.time); })
                 .y0(height)
@@ -129,8 +132,10 @@ var perf_vis = function () {
         selection.each(function (performance_numbers, i) {
 
             /* Add a sole g.chart-container */
+            var svg = d3.select(this);
+
             var init_chart =
-                d3.select(this)
+                  svg
                     .selectAll('g.chart-container')
                     .data([0])
                   .enter()
@@ -141,23 +146,52 @@ var perf_vis = function () {
                                          margins.top + ')');
 
             init_chart
-                .append('path')
+              .append('path')
                 .attr('class', 'area-chart');
 
             init_chart
-                .append('g')
+              .append('g')
                 .classed('x', true)
                 .classed('axis', true)
                 .attr('transform',
-                      'translate(' + 0+ ',' +
+                      'translate(' + 0 + ',' +
                                      height + ')');
 
             init_chart
-                .append('g')
+              .append('g')
                 .classed('y', true)
                 .classed('axis', true)
                 .attr('transform',
                       'translate(' + 0 + ',' + 0 + ')');
+
+            svg.selectAll('.y.label')
+                .data([0])
+              .enter()
+                .append('g')
+                .classed('y', true)
+                .classed('label', true)
+                .attr('transform',
+                      'translate(' + (margins.left / 2) + ','
+                                   + (margins.top + height / 2) + ')' +
+                      'rotate(-90)')
+              .append('text')
+                .attr('text-anchor', 'middle')
+                .attr('dy', '0.35em')
+                .text(yLabel)
+
+            svg.selectAll('.x.label')
+                .data([0])
+              .enter()
+                .append('g')
+                .classed('x', true)
+                .classed('label', true)
+                .attr('transform',
+                      'translate(' + (margins.left + width / 2) + ','
+                                   + (margins.top + height + margins.bottom / 2) + ')')
+              .append('text')
+                .attr('text-anchor', 'middle')
+                .attr('dy', '0.35em')
+                .text(xLabel)
 
 
             // Updating the chart now.
@@ -230,7 +264,7 @@ fetch('data/example1.json')
         perf_post_idx: [0, 0]
     };
 
-    var tweets_1 = [], tweets_2 = [], timer_id, id = 0;
+    var tweets_1 = [], tweets_2 = [], timer_id = null, id = 0;
     var perf_1_data = [], perf_1_data_idx = 0;
     var perf_2_data = [], perf_2_data_idx = 0;
     var perf_max_value = 0;
@@ -323,8 +357,23 @@ fetch('data/example1.json')
         }
     }
 
+    /* Draw the axis with the first point. */
     update_all_vis(vis_state);
+    clearTimeout(timer_id);
+    timer_id = null;
 
+    d3.select('.js-play')
+        .on('click', function () {
+            update_all_vis(vis_state);
+        });
+
+    d3.select('.js-stop')
+        .on('click', function () {
+            if (timer_id !== null) {
+                clearTimeout(timer_id);
+                timer_id = null;
+            }
+        });
 
     // function update_randomly(tweets, id, elem_id) {
     //     var rand = Math.random();
