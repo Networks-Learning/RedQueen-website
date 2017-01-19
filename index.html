@@ -18,6 +18,10 @@
 <body>
   <article>
     <h1 class="red-queen">RedQueen</h1>
+    <p class="subtitle">
+      An Online Algorithm for Smart Broadcasting in Social Networks
+    </p>
+
     <section>
       <h2>Introduction</h2>
 
@@ -30,23 +34,57 @@
         </span>
 
         Users in social networks whose posts stay at the top of their
-        followers' feeds the longest time are more likely to be noticed. Can
-        we design an online algorithm to help them decide when to post to stay
-        at the top? In this paper, we address this question as a novel optimal
+        followers' feeds the longest time are more likely to be noticed. Can we
+        design an online algorithm to help them decide when to post to stay at
+        the top? In this paper, we address this question as a novel optimal
         control problem for jump stochastic differential equations. For a wide
         variety of feed dynamics, we show that the optimal broadcasting
         intensity for any user is surprisingly simple -- it is given by the
         position of her most recent post on each of her follower's feeds. As a
         consequence, we are able to develop a simple and highly efficient
-        online algorithm, <em class="red-queen">RedQueen</em>, to sample the optimal times for the user to
-        post. Experiments on both synthetic and real data gathered from Twitter
-        show that our algorithm is able to consistently make a user's posts
-        more visible over time, is robust to volume changes on her followers'
-        feeds, and significantly outperforms the state of the art.
+        online algorithm, <em class="red-queen">RedQueen</em>, to sample the
+        optimal times for the user to post. Experiments on both synthetic and
+        real data gathered from Twitter show that our algorithm is able to
+        consistently make a user's posts more visible over time, is robust to
+        volume changes on her followers' feeds, and significantly outperforms
+        the state of the art.
       </p>
 
+      <h2>Feeds in social media</h2>
       <p>
+        Feeds in social media display posts of all <em>followees</em> of the
+        user in some order. Usually, the order is determined
+        inverse-chronologically.
+      </p>
 
+      <figure>
+        <span class="marginnote">Feed of a follower contains broadcasts from several sources, including from a source interested in staying on top of the follower's feed.</span>
+        <img src="img/when-to-post-problem-demo.svg" alt="When to post problem" class="full-width">
+      </figure>
+
+        <!--
+        <label class="margin-toggle" for="fig-redqueen">⊕</label>
+        <input id="fig-redqueen" class="margin-toggle" type="checkbox">
+        <span class="marginnote">
+          <svg viewBox="0 0 100 150" id="example-feed" class="margin content"></svg>
+          A bursty feed of a follower with the rank of the users.
+        </span>
+        -->
+
+      <p>
+        The rank of the broadcaster in the feed can be modeled using the following equation:
+
+        $$
+        r(t+dt) =
+        \begin{cases}
+        \phantom{\mathbin{+}}(r(t)+1) dM(t) (1-dN(t)) & \text{Increases by one}\\
+	+ 0 & \text{Becomes zero}\\
+        + r(t)(1 - dM(t))(1- dN(t)) & \text{Remains the same}
+        \end{cases}
+        $$
+
+        where \( dM(t) \) and \( dN(t) \) denote the presence or absence of a
+        <em>jump</em> in the corresponding point process.
       </p>
 
       <h2>The Algorithm</h2>
@@ -113,6 +151,8 @@
       <h2>Acknowledgements</h2>
       <p>
         The <em class="red-queen">RedQueen</em> icon was made by <a href="http://www.flaticon.com/authors/zlatko-najdenovski" title="Zlatko Najdenovski">Zlatko Najdenovski</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a>.
+
+        Other icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
       </p>
     </section>
   </article>
