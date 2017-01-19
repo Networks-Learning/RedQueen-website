@@ -34,8 +34,8 @@ var feed_vis = function () {
     var width = 100, height = 150;
     var tweet_height = height / (feed_length + 3), tweet_width = 50;
     var tweet_colors = {
-        'user': '#1E90FF',
-        'other': '#FF008B'
+        'user':  '#EFA856',   // '#1E90FF',
+        'other': '#4AB3C1'    // '#FF008B'
     };
 
     function tweet_flow(selection) {
