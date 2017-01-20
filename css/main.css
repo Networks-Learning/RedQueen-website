@@ -47,7 +47,6 @@ svg {
 }
 
 .area-chart {
-    fill: steelblue;
     shape-rendering: crispEdges;
 }
 
@@ -91,6 +90,6 @@ svg {
     color: RGB(239, 168, 86);
 }
 
-.label text, .tick text {
+.banner text, .label text, .tick text {
     font-size: 75%;
 }

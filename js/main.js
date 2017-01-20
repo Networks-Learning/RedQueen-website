@@ -1,5 +1,7 @@
 var eps = 1e-6;
 
+var perf_colors = ['#D00000', '#1C3144'];
+
 function mb(x, def) {
     return (typeof x === 'undefined') ? def : x;
 }
@@ -43,20 +45,51 @@ var feed_vis = function () {
     /* Visualize the feed of the user. */
     var feed_length = 50;
     var width = 100, height = 150;
-    var tweet_height = height / (feed_length + 3), tweet_width = 50;
+    var banner_height = 20;
+
+    var tweet_height = (height - banner_height) / (feed_length + 3);
+    var tweet_width = 50;
+
     var tweet_colors = {
-        'user':  '#EFA856',   // '#1E90FF',
-        'other': '#4AB3C1'    // '#FF008B'
+        'user':  '#EFA856',
+        'other': '#4AB3C1'
     };
 
-    var name = 'Unknown algorithm';
+    var banner_color = 'black';
 
-    function tweet_flow(selection) {
+    var banner = 'Unknown algorithm';
+
+    function feed_vis(selection) {
         selection.each(function (tweet_list, i) {
             /* a tweet_list looks like the following:
              * [ { 'id': <number>, 'source': 'other' | 'user' } ]
              */
-            var tweets = d3.select(this)
+            var svg = d3.select(this);
+
+            svg.selectAll('.banner')
+                .data([0])
+              .enter()
+                .append('g')
+                .classed('banner', true)
+                .attr('transform', 'translate(' + (width / 2) + ',' +
+                                               (banner_height / 2) + ')')
+                .append('text')
+                .text(banner)
+                .attr('fill', banner_color)
+                .attr('text-anchor', 'middle')
+                .attr('dy', '0.35em');
+
+            var tweetContainer = svg.selectAll('.tweets_container')
+                                    .data([0]);
+
+            tweetContainer = tweetContainer
+                              .enter()
+                                .append('g')
+                                .classed('tweets_container', true)
+                                .attr('transform', 'translate(0,' + banner_height + ')')
+                              .merge(tweetContainer);
+
+            var tweets = tweetContainer
                            .selectAll('rect.tweet')
                            .data(tweet_list.slice(0, feed_length),
                                  function (tweet) { return tweet.id; });
@@ -93,13 +126,26 @@ var feed_vis = function () {
         });
     }
 
-    tweet_flow.feed_length = function (_) {
-        if (!arguments.length) return feed_length;
-        feed_length = _;
-        return tweet_flow;
+    feed_vis.banner = function (_) {
+        if (!arguments.length) return banner;
+        banner = _;
+        return feed_vis;
     };
 
-    return tweet_flow;
+    feed_vis.banner_color = function (_) {
+        if (!arguments.length) return banner_color;
+        banner_color = _;
+        return feed_vis;
+    };
+
+
+    feed_vis.feed_length = function (_) {
+        if (!arguments.length) return feed_length;
+        feed_length = _;
+        return feed_vis;
+    };
+
+    return feed_vis;
 };
 
 var perf_vis = function () {
@@ -111,6 +157,7 @@ var perf_vis = function () {
         bottom: 50
     };
 
+    /* width/height is re-calculated if the margins are changed. */
     var width = 300 - margins.left - margins.right,
         height = 100 - margins.top - margins.bottom;
 
@@ -133,6 +180,8 @@ var perf_vis = function () {
     var yAxis = d3.axisLeft()
                     .scale(yScale)
                     .ticks(4);
+
+    var color = 'steelblue';
 
     var xLabel = '',
         yLabel = '';
@@ -192,6 +241,7 @@ var perf_vis = function () {
                 .attr('text-anchor', 'middle')
                 .attr('dy', '0.35em')
                 .text(yLabel)
+                .attr('fill', color);
 
             svg.selectAll('.x.label')
                 .data([0])
@@ -223,9 +273,16 @@ var perf_vis = function () {
             var chart = d3.select(this)
                           .select('path.area-chart')
                           .datum(performance_numbers)
-                          .attr('d', area);
+                          .attr('d', area)
+                          .attr('fill', color);
         });
     }
+
+    perf_vis.color = function (_) {
+        if (!arguments.length) return color;
+        color = _;
+        return perf_vis;
+    };
 
     perf_vis.xLabel = function (_) {
         if (!arguments.length) return xLabel;
@@ -239,6 +296,8 @@ var perf_vis = function () {
             /* Poor man's Object update. */
             margins[key] = _[key];
         }
+        width = 300 - margins.left - margins.right;
+        height = 100 - margins.top - margins.bottom;
         return perf_vis;
     };
 
@@ -294,7 +353,7 @@ fetch('data/example1.json')
 
     // Initialize the state of the visualisation.
     var vis_state = {
-        cur_time: 0,
+        cur_time: -eps,
         wall_idx: 0,
         perf_post_idx: [0, 0]
     };
@@ -349,8 +408,20 @@ fetch('data/example1.json')
             tweets_1 = tweets_1.slice(0, feed_length);
             tweets_2 = tweets_2.slice(0, feed_length);
 
-            d3.select('#feed-1-vis').datum(tweets_1).call(feed_instances);
-            d3.select('#feed-2-vis').datum(tweets_2).call(feed_instances);
+            d3.select('#feed-1-vis')
+                .datum(tweets_1)
+                .call(
+                    feed_instances
+                    .banner(get_name(chosen_perf_1))
+                    .banner_color(perf_colors[0])
+                );
+            d3.select('#feed-2-vis')
+                .datum(tweets_2)
+                .call(
+                    feed_instances
+                    .banner(get_name(chosen_perf_2))
+                    .banner_color(perf_colors[1])
+                );
 
             // Updating the performance visualisations.
             perf_1_data_idx = update_till_time(perf_1_data,
@@ -375,9 +446,10 @@ fetch('data/example1.json')
                 .datum(perf_1_data)
                 .call(
                     perf_instances
-                    .margins({ bottom: 10, top: 50 })
+                    .margins({ bottom: 30, top: 30 })
                     .xLabel('')
                     .yLabel(get_name(chosen_perf_1))
+                    .color(perf_colors[0])
                 );
 
             d3.select('#perf-2-vis')
@@ -387,6 +459,7 @@ fetch('data/example1.json')
                     .margins({ bottom: 50, top: 10 })
                     .xLabel('time')
                     .yLabel(get_name(chosen_perf_2))
+                    .color(perf_colors[1])
                 );
 
             // Getting ready for the next iteration.
