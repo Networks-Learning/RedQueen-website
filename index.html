@@ -28,6 +28,10 @@
     <p class="subtitle">
       An Online Algorithm for Smart Broadcasting in Social Networks
     </p>
+    <p class="subtitle">
+      <a href="http://www.wsdm-conference.org/2017/">WSDM, 2017</a>; <a href="https://arxiv.org/abs/1610.05773">arxiv.org/abs/1610.05773</a>
+    </p>
+
 
     <section>
       <h2>Introduction</h2>
@@ -161,9 +165,10 @@
         $$
           \ell(r(t),u(t)) = \frac{1}{2} s(t) \,r^2(t) + \frac{1}{2} q\,u^2(t)
         $$
-        <span class="marginnote">This results in a convex loss function.</span>
-        where the \( s \) and the \( q \) denote the relative penalty of
-        broadcasting and the rank we obtain.
+        where the \( s(t) \) and the \( q \) denote the relative penalty of
+        the rank we obtain and the amount of broadcasting we do.
+
+        <!-- The resulting loss function to optimize in a convex loss function. -->
 
         Solving the equation, we arrive at the elegant solution:
 
@@ -191,7 +196,7 @@
       <figure>
         <label class="margin-toggle" for="redqueen-demo-caption">⊕</label>
         <input id="redqueen-demo-caption" class="margin-toggle" type="checkbox">
-        <span class="marginnote">Interactive demo</span>
+        <span class="marginnote">Interactive demo showing the performance of <span class="red-queen">RedQueen</span> (i.e. \( r(t) \)) against a Poisson broadcaster (who posts at random times) against a bursty stream of tweets coming from other broadcasters.</span>
 
         <div class="long vis-aspect">
           <svg id="perf-1-vis" width="100%" class="content" viewBox="0 0 300 100"></svg>
