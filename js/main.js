@@ -1,8 +1,19 @@
+var eps = 1e-6;
+
 function mb(x, def) {
     return (typeof x === 'undefined') ? def : x;
 }
 
-var eps = 1e-6;
+function get_name(perf) {
+    switch(perf) {
+        case 'redqueen':
+            return 'RᴇᴅQᴜᴇᴇɴ';
+        case 'poisson':
+            return 'Poisson';
+        default:
+            return perf;
+    }
+}
 
 function update_till_time(dst_arr, src_arr, idx, end_time) {
     var last_value = dst_arr.length > 0 ? dst_arr[dst_arr.length - 1].value : 0;
@@ -37,6 +48,8 @@ var feed_vis = function () {
         'user':  '#EFA856',   // '#1E90FF',
         'other': '#4AB3C1'    // '#FF008B'
     };
+
+    var name = 'Unknown algorithm';
 
     function tweet_flow(selection) {
         selection.each(function (tweet_list, i) {
@@ -114,14 +127,15 @@ var perf_vis = function () {
                     .domain([0, max_value]);
 
     var xAxis = d3.axisBottom()
-                    .scale(xScale);
+                    .scale(xScale)
+                    .ticks(0);
 
     var yAxis = d3.axisLeft()
                     .scale(yScale)
                     .ticks(4);
 
-    var xLabel = 'Time',
-        yLabel = 'Rank';
+    var xLabel = '',
+        yLabel = '';
 
     var area = d3.area()
                 .x(function (d) { return xScale(d.time); })
@@ -212,6 +226,27 @@ var perf_vis = function () {
                           .attr('d', area);
         });
     }
+
+    perf_vis.xLabel = function (_) {
+        if (!arguments.length) return xLabel;
+        xLabel = _;
+        return perf_vis;
+    };
+
+    perf_vis.margins = function (_) {
+        if (!arguments.length) return margins;
+        for (key in _) {
+            /* Poor man's Object update. */
+            margins[key] = _[key];
+        }
+        return perf_vis;
+    };
+
+    perf_vis.yLabel = function (_) {
+        if (!arguments.length) return yLabel;
+        yLabel = _;
+        return perf_vis;
+    };
 
     perf_vis.final_time = function (_) {
         if (!arguments.length) return scaled_final_time;
@@ -336,8 +371,23 @@ fetch('data/example1.json')
             perf_instances.max_value(Math.max(perf_max,
                                               perf_instances.max_value()));
 
-            d3.select('#perf-1-vis').datum(perf_1_data).call(perf_instances);
-            d3.select('#perf-2-vis').datum(perf_2_data).call(perf_instances);
+            d3.select('#perf-1-vis')
+                .datum(perf_1_data)
+                .call(
+                    perf_instances
+                    .margins({ bottom: 10, top: 50 })
+                    .xLabel('')
+                    .yLabel(get_name(chosen_perf_1))
+                );
+
+            d3.select('#perf-2-vis')
+                .datum(perf_2_data)
+                .call(
+                    perf_instances
+                    .margins({ bottom: 50, top: 10 })
+                    .xLabel('time')
+                    .yLabel(get_name(chosen_perf_2))
+                );
 
             // Getting ready for the next iteration.
             var old_time = vis_state.cur_time;
