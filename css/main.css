@@ -82,3 +82,15 @@ svg {
 .full-width {
     width: 100%;
 }
+
+.other {
+    color: RGB(74, 179, 193);
+}
+
+.us {
+    color: RGB(239, 168, 86);
+}
+
+.label text, .tick text {
+    font-size: 75%;
+}
