@@ -17,6 +17,13 @@
 </head>
 <body>
   <article>
+    <div style="display: none">
+      $$
+        \definecolor{us}{RGB}{239, 168, 86}
+        \definecolor{other}{RGB}{74, 179, 193}
+      $$
+    </div>
+
     <h1 class="red-queen">RedQueen</h1>
     <p class="subtitle">
       An Online Algorithm for Smart Broadcasting in Social Networks
@@ -72,35 +79,106 @@
         -->
 
       <p>
-        The rank of the broadcaster in the feed can be modeled using the following equation:
+        The dynamics of the rank \( r(t) \) of the <span class="us">broadcaster</span> in the feed can
+        be modeled using the following equation:
 
+        <!--
         $$
         r(t+dt) =
         \begin{cases}
-        \phantom{\mathbin{+}}(r(t)+1) dM(t) (1-dN(t)) & \text{Increases by one}\\
-	+ 0 & \text{Becomes zero}\\
-        + r(t)(1 - dM(t))(1- dN(t)) & \text{Remains the same}
+        \phantom{\mathbin{+}}\, (r(t)+1)\,{\color{others} dM(t)}\,{\color{us} (1-dN(t))}
+            & \text{Increases by one}\\
+        +\, 0\,{\color{other}(1 - dM(t))}\,{\color{us} dN(t)}
+            & \text{Becomes zero}\\
+        +\, r(t)\,{\color{other} (1 - dM(t))}\,{\color{us} (1- dN(t))}
+            & \text{Remains the same}
         \end{cases}
         $$
+        -->
 
-        where \( dM(t) \) and \( dN(t) \) denote the presence or absence of a
-        <em>jump</em> in the corresponding point process.
+        $$
+        r(t+dt) = \left\{
+          \begin{array}{ccccl}
+            & (r(t)+1) & {\color{others} dM(t)} & {\color{us} (1-dN(t))} & \text{Increases by one}\\
+          + & 0 & {\color{other}(1 - dM(t))} & {\color{us} dN(t)} & \text{Becomes zero}\\
+          + & r(t) & {\color{other} (1 - dM(t))} & {\color{us} (1- dN(t))} & \text{Remains the same}
+          \end{array}
+          \right.
+        $$
+
+        where \( {\color{other} dM(t)}, {\color{us} dN(t)} \in \{0, 1\} \) denote the presence or absence of a
+        <em>broadcast</em> in the respective point process at time \( t \).
+      </p>
+
+      <p>
+        The evolution of \( \color{us} N(t) \) is under the control of the <span class="us">broadcaster</span>,
+        whereas the \( \color{other} M(t) \) may behave in various ways:
+      </p>
+
+      <ul>
+        <li>It may be nearly constant (e.g. large number of diverse followees)</li>
+        <li>It may have bursts (e.g. breaking news posts)</li>
+        <li>It may be piecewise constant with some period (e.g. most followees are from a particular time zones)
+          <span class="marginnote">
+            <a href="http://www.kdd.org/kdd2016/subtopic/view/smart-broadcasting-do-you-want-to-be-seen">Karimi et. al.</a> assume this model.
+          </span>
+        </li>
+        <li>\( \ldots \)</li>
+      </ul>
+
+      <p>
+        Thanks to our novel formulation of the problem, our solution
+        <span class="red-queen">RedQueen</span> is able to handle all of these
+        cases, <em>without needing to infer the parameters of any process.</em>
+      </p>
+
+      <h2>Objective</h2>
+
+      <p>
+        <em>Introduce the limiting on the number of tweets.</em>
+      </p>
+
+      <p>
+        We solve the following objective function:
+        <span class="marginnote">This objective is generalized for multiple followers.</span>
+
+        $$
+          \begin{align}
+          \underset{u(t_0, t_f]}{\text{minimize}} &
+              \quad \mathbb{E}_{(N, M)(t_0, t_f]}\left[
+                \phi(r(t_f)) + \int_{t_0}^{t_f} \ell(r(\tau), u(\tau)) d\tau
+              \right] \\
+          \text{subject to} & \quad u(t) \geq 0 \quad \forall t \in (t_0, t_f]
+          \end{align}
+        $$
+
+        <span class="marginnote">
+          This is a common way to formulate problems for <a href="https://en.wikipedia.org/wiki/Hamilton%E2%80%93Jacobi%E2%80%93Bellman_equation#Extension_to_stochastic_problems">solving stochastic control problems</a>.
+        </span>
+
+        Quadratic loss is employed as the cost rate function \( \ell( \cdot, \cdot ) \):
+
+        $$
+          \ell(r(t),u(t)) = \frac{1}{2} s(t) \,r^2(t) + \frac{1}{2} q\,u^2(t)
+        $$
+        <span class="marginnote">This results in a convex loss function.</span>
+        where the \( s \) and the \( q \) denote the relative penalty of
+        broadcasting and the rank we obtain.
+
+        Solving the equation, we arrive at the elegant solution:
+
+        $$
+        \overbrace{u(t)}^{\text{Broadcast intensity}} = \sqrt{s/q}\,\underbrace{r(t)}_{\text{Rank in feed}}
+        $$
       </p>
 
       <h2>The Algorithm</h2>
 
       <p>
-
-        $$
-        \overbrace{u(t)}^{\text{Broadcast intensity}} = \sqrt{s/q}\,\underbrace{r(t)}_{\text{Rank in feed}}
-        $$
-
-
         <label class="margin-toggle" for="eqn-user-rate">⊕</label>
         <input id="eqn-user-rate" class="margin-toggle" type="checkbox">
         <span class="marginnote">
         </span>
-
       </p>
 
       <h2>Demo</h2>
@@ -133,6 +211,14 @@
         </div>
       </figure>
 
+      <h2>Results</h2>
+
+      <p>
+        We compared <span class="red-queen">RedQueen</span> against an Oracle
+        and the state of the art and saw that our algorithm fared favourably.
+      </p>
+
+
       <h2>The Name <em class="red-queen">RedQueen</em></h2>
 
       <p>
@@ -158,5 +244,12 @@
   </article>
 
   <script src="js/main.js"></script>
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      TeX: {
+        extensions: [ "color.js" ]
+      }
+    });
+  </script>
 </body>
 </html>
