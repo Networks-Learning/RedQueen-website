@@ -4,6 +4,15 @@
   <meta charset="UTF-8">
   <title>RedQueen Demo</title>
 
+  <!-- MathJax configuration must come before MathJAX is loaded even if async -->
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      TeX: {
+        extensions: [ "color.js" ]
+      }
+    });
+  </script>
+
   <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_SVG" async></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/2.0.1/fetch.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.4.0/d3.js"></script>
@@ -26,6 +35,12 @@
 
     <h1 class="red-queen">RedQueen</h1>
     <p class="subtitle">
+      <label class="margin-toggle" for="fig-redqueen">⊕</label>
+      <input id="fig-redqueen" class="margin-toggle" type="checkbox">
+      <span class="marginnote">
+        <img src="img/red_queen.512.png" alt="RedQueen"
+             aria="hidden" class="red-queen-icon" />
+      </span>
       An Online Algorithm for Smart Broadcasting in Social Networks
     </p>
     <p class="subtitle">
@@ -37,35 +52,31 @@
       <h2>Introduction</h2>
 
       <p>
-        <label class="margin-toggle" for="fig-redqueen">⊕</label>
-        <input id="fig-redqueen" class="margin-toggle" type="checkbox">
-        <span class="marginnote">
-          <img src="img/red_queen.512.png" alt="RedQueen"
-               aria="hidden" class="red-queen-icon">
-        </span>
+        User attention is becoming a sparse commodity. This is evinced by the
+        proliferation of studies which point at information overload or at the
+        plethora of articles proclaiming to recommend when to post your messages
+        to maximise the probability of your followers reacting to the post.
+        <!-- Can give references here -->
+      </p>
 
-        Users in social networks whose posts stay at the top of their
-        followers' feeds the longest time are more likely to be noticed. Can we
-        design an online algorithm to help them decide when to post to stay at
-        the top? In this paper, we address this question as a novel optimal
-        control problem for jump stochastic differential equations. For a wide
-        variety of feed dynamics, we show that the optimal broadcasting
-        intensity for any user is surprisingly simple -- it is given by the
-        position of her most recent post on each of her follower's feeds. As a
-        consequence, we are able to develop a simple and highly efficient
-        online algorithm, <em class="red-queen">RedQueen</em>, to sample the
-        optimal times for the user to post. Experiments on both synthetic and
-        real data gathered from Twitter show that our algorithm is able to
-        consistently make a user's posts more visible over time, is robust to
-        volume changes on her followers' feeds, and significantly outperforms
-        the state of the art.
+      <p>
+        We want to solve the problem
       </p>
 
       <h2>Feeds in social media</h2>
       <p>
         Feeds in social media display posts of all <em>followees</em> of the
-        user in some order. Usually, the order is determined
-        inverse-chronologically.
+        user in some order. However, the user does not pay equal attention to
+        all posts. Instead, more attention is given to the posts on top of the
+        feed while the posts which disappear <em>underneath the fold</em> are
+        given very little attention.
+      </p>
+
+      <p>
+        Hence, a heuristic approach to seeking user attention would be to
+        minimize the rank (\( r(t) \))of our posts on the follower's feed.
+        <span class="marginnote">The rank \( r(t) \) is the position of the
+        latest post by a broadcaster on a follower's feed.</span>
       </p>
 
       <figure>
@@ -83,22 +94,12 @@
         -->
 
       <p>
-        The dynamics of the rank \( r(t) \) of the <span class="us">broadcaster</span> in the feed can
-        be modeled using the following equation:
-
-        <!--
-        $$
-        r(t+dt) =
-        \begin{cases}
-        \phantom{\mathbin{+}}\, (r(t)+1)\,{\color{others} dM(t)}\,{\color{us} (1-dN(t))}
-            & \text{Increases by one}\\
-        +\, 0\,{\color{other}(1 - dM(t))}\,{\color{us} dN(t)}
-            & \text{Becomes zero}\\
-        +\, r(t)\,{\color{other} (1 - dM(t))}\,{\color{us} (1- dN(t))}
-            & \text{Remains the same}
-        \end{cases}
-        $$
-        -->
+        If the feeds are inverse-chronologically sorted, then the dynamics of the rank \( r(t) \) of the <span class="us">broadcaster</span> in the feed can be modeled using the following equation:
+        <span class="marginnote">
+          Our method can generalize to any ordering of
+          posts as long as we can reverse-engineer the algorithm and write out
+          the dynamics of \( r(t) \).
+        </span>
 
         $$
         r(t+dt) = \left\{
@@ -117,9 +118,9 @@
       <p>
         The evolution of \( \color{us} N(t) \) is under the control of the <span class="us">broadcaster</span>,
         whereas the \( \color{other} M(t) \) may behave in various ways:
-          <span class="marginnote">
-            <a href="http://www.kdd.org/kdd2016/subtopic/view/smart-broadcasting-do-you-want-to-be-seen">Karimi et. al.</a> assume that the broadcasting frequency of <span class="others">other broadcasters</span> is piecewise constant.
-          </span>
+        <span class="marginnote">
+          <a href="http://www.kdd.org/kdd2016/subtopic/view/smart-broadcasting-do-you-want-to-be-seen">Karimi et. al.</a> assume that the broadcasting frequency of <span class="others">other broadcasters</span> is piecewise constant.
+        </span>
       </p>
 
       <ul>
@@ -139,13 +140,17 @@
       <h2>Objective</h2>
 
       <p>
-        <em>Introduce the limiting on the number of tweets.</em>
-      </p>
+        Now one can attempt to optimize for many different kind of losses
+        to find our optimal rate of posting. One such choice, taken by Karimi et. al.
+        is to optimize for <em>Time spent in top-k</em>, wherein, they find the
+        rates which maximize the time the broadcaster's posts spend with \( r(t) \lt k \).
+        However, we choose the following quadratic loss function:
 
-      <p>
-        We solve the following objective function:
-        <span class="marginnote">This objective is generalized for multiple followers.</span>
+        <span class="marginnote">
+          This objective can be generalized for multiple followers. For details, see <a href="https://arxiv.org/abs/1610.05773">our paper</a>.
+        </span>
 
+        <!--
         $$
           \begin{align}
           \underset{u(t_0, t_f]}{\text{minimize}} &
@@ -159,21 +164,45 @@
         <span class="marginnote">
           This is a common way to formulate problems for <a href="https://en.wikipedia.org/wiki/Hamilton%E2%80%93Jacobi%E2%80%93Bellman_equation#Extension_to_stochastic_problems">solving stochastic control problems</a>.
         </span>
-
-        Quadratic loss is employed as the cost rate function \( \ell( \cdot, \cdot ) \):
+        -->
 
         $$
-          \ell(r(t),u(t)) = \frac{1}{2} s(t) \,r^2(t) + \frac{1}{2} q\,u^2(t)
+          \begin{align}
+          \underset{u(t_0, t_f]}{\text{minimize}} &
+              \quad \mathbb{E}_{(N, M)(t_0, t_f]}\left[
+                \int_{t_0}^{t_f} \left( \frac{1}{2} s \,r^2(\tau) + \frac{1}{2} q\,u^2(\tau) \right) d\tau
+              \right] \\
+          \text{subject to} & \quad u(t) \geq 0 \quad \forall t \in (t_0, t_f]
+          \end{align}
         $$
-        where the \( s(t) \) and the \( q \) denote the relative penalty of
+      </p>
+
+      <p>
+        This function penalizes high ranks quadratically
+        \( \frac{1}{2} s \,r^2(t) \)
+        while also containing a regularization term \( \frac{1}{2} q\,u^2(t) \),
+        which prevents the broadcaster from posting with very high intensity.
+      </p>
+
+      <p>
+        The \( s \) and the \( q \) denote the relative penalty of
         the rank we obtain and the amount of broadcasting we do.
+        <span class="marginnote">The term \( s \) can be made a function of time, i.e. \( s(t) \), to
+          change the <em>significance</em> of obtaining a high rank at time \( t \).
+          Also, in case of multiple followers, the term \( s \) can be a vector, which can be used
+          to weigh the ranks of the broadcaster on different follower's feeds differently.
+          For details, see <a href="https://arxiv.org/abs/1610.05773">our paper</a>.
+        </span>
 
         <!-- The resulting loss function to optimize in a convex loss function. -->
+      </p>
 
-        Solving the equation, we arrive at the elegant solution:
+      <p>
+        With this choice of the loss function, the optimization problem can be solved analytically.
+        We arrive at the elegant solution:
 
         $$
-        \overbrace{u(t)}^{\text{Broadcast intensity}} = \sqrt{s/q}\,\underbrace{r(t)}_{\text{Rank in feed}}
+        \overbrace{u(t)}^{\text{broadcast intensity}} = \sqrt{s/q}\,\underbrace{r(t)}_{\text{Rank in feed}}
         $$
       </p>
 
@@ -249,12 +278,5 @@
   </article>
 
   <script src="js/main.js"></script>
-  <script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-      TeX: {
-        extensions: [ "color.js" ]
-      }
-    });
-  </script>
 </body>
 </html>
