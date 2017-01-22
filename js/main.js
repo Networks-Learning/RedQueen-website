@@ -96,8 +96,6 @@ var feed_vis = function () {
                 }
             }
 
-            console.log('our_rank = ', our_rank);
-
             var tweet_marker = tweet_container.selectAll('.marker')
                                   .data((our_rank !== null) ? [our_rank] : []);
 
@@ -512,7 +510,19 @@ fetch('data/example1.json')
         } else {
             /* Take clean up actions here, which should be taken after
              * the visualisation has run its course.
+             *
+             * This can include _resetting_ the Play button to 'Replay'
+             * button or to grey out the buttons.
              */
+            d3.select('.js-play')
+                .on('click', null)
+                .classed('button-play', false)
+                .classed('pure-button-disabled', true);
+
+            d3.select('.js-stop')
+                .on('click', null)
+                .classed('button-stop', false)
+                .classed('pure-button-disabled', true);
         }
     }
 
