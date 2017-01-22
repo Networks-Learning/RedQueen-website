@@ -77,11 +77,16 @@
       <p>
         Hence, a heuristic approach to seeking user attention would be to
         minimize the rank (\( r(t) \)) of our posts on the follower's feed.
+
+        <label class="margin-toggle" for="rank-defn">⊕</label>
+        <input id="rank-defn" class="margin-toggle" type="checkbox">
         <span class="marginnote">The rank \( r(t) \) is the position of the
         latest post by a broadcaster on a follower's feed.</span>
       </p>
 
       <figure>
+        <label class="margin-toggle" for="feed-figure">⊕</label>
+        <input id="feed-figure" class="margin-toggle" type="checkbox">
         <span class="marginnote">
           Feed of a follower contains broadcasts from several sources,
           including from a source interested in staying on top of the
@@ -101,6 +106,8 @@
 
       <p>
         If the feeds are inverse-chronologically sorted, then the dynamics of the rank \( r(t) \) of the <span class="us">broadcaster</span> in the feed can be modeled using the following equation:
+        <label class="margin-toggle" for="generalize-rank-algo">⊕</label>
+        <input id="generalize-rank-algo" class="margin-toggle" type="checkbox">
         <span class="marginnote">
           Our method can generalize to any ordering of
           posts as long as we can reverse-engineer the algorithm and write out
@@ -110,9 +117,9 @@
         $$
         r(t+dt) = \left\{
           \begin{array}{ccccl}
-            & (r(t)+1) & {\color{other} dM(t)} & {\color{us} (1-dN(t))} & \text{Increases by one}\\
-          + & 0 & {\color{other}(1 - dM(t))} & {\color{us} dN(t)} & \text{Becomes zero}\\
-          + & r(t) & {\color{other} (1 - dM(t))} & {\color{us} (1- dN(t))} & \text{Remains the same}
+            & (r(t)+1) & {\color{other} dM(t)} & {\color{us} (1-dN(t))} & \text{Others post}\\
+          + & 0 & {\color{other}(1 - dM(t))} & {\color{us} dN(t)} & \text{Our broadcaster posts}\\
+          + & r(t) & {\color{other} (1 - dM(t))} & {\color{us} (1- dN(t))} & \text{No-one posts}
           \end{array}
           \right.
         $$
@@ -124,6 +131,8 @@
       <p>
         The evolution of \( \color{us} N(t) \) is under the control of the <span class="us">broadcaster</span>,
         whereas the \( \color{other} M(t) \) may behave in various ways:
+        <label class="margin-toggle" for="karimi-assumption">⊕</label>
+        <input id="karimi-assumption" class="margin-toggle" type="checkbox">
         <span class="marginnote">
           <a href="http://www.kdd.org/kdd2016/subtopic/view/smart-broadcasting-do-you-want-to-be-seen">Karimi et. al.</a> assume that the broadcasting frequency of <span class="other">other broadcasters</span> is piecewise constant.
         </span>
@@ -152,6 +161,8 @@
         rates which maximize the time the broadcaster's posts spend with \( r(t) \lt k \).
         However, we choose the following quadratic loss function:
 
+        <label class="margin-toggle" for="generalize-multiple-followers">⊕</label>
+        <input id="generalize-multiple-followers" class="margin-toggle" type="checkbox">
         <span class="marginnote">
           This objective can be generalized for multiple followers. For details, see <a href="https://arxiv.org/abs/1610.05773">our paper</a>.
         </span>
@@ -193,6 +204,9 @@
       <p>
         The \( s \) and the \( q \) denote the relative penalty of
         the rank we obtain and the amount of broadcasting we do.
+
+        <label class="margin-toggle" for="generalize-significance">⊕</label>
+        <input id="generalize-significance" class="margin-toggle" type="checkbox">
         <span class="marginnote">The term \( s \) can be made a function of time, i.e. \( s(t) \), to
           change the <em>significance</em> of obtaining a high rank at time \( t \).
           Also, in case of multiple followers, the term \( s \) can be a vector, which can be used
@@ -230,10 +244,12 @@
       <h2 id="sampling">The Sampling</h2>
 
       <p>
+        <!--
         <label class="margin-toggle" for="eqn-user-rate">⊕</label>
         <input id="eqn-user-rate" class="margin-toggle" type="checkbox">
         <span class="marginnote">
         </span>
+        -->
 
         Now that we know what how <span class="us">the broadcaster</span> should
         regulate his messages, we have to determine when exactly should he post.
@@ -276,7 +292,7 @@
       <figure>
         <label class="margin-toggle" for="redqueen-demo-caption">⊕</label>
         <input id="redqueen-demo-caption" class="margin-toggle" type="checkbox">
-        <span class="marginnote">Interactive demo showing the performance of <span class="red-queen">RedQueen</span> (i.e. \( r(t) \)) against a Poisson broadcaster (who posts at random times) against a bursty stream of tweets coming from other broadcasters.</span>
+        <span class="marginnote">Interactive demo showing the performance (i.e. \( r(t) \)) of <span class="red-queen">RedQueen</span> against a Poisson broadcaster (who posts at random times) against a bursty stream of tweets coming from other broadcasters.</span>
 
         <div class="long vis-aspect">
           <svg id="perf-1-vis" width="100%" class="content" viewBox="0 0 300 100"></svg>
