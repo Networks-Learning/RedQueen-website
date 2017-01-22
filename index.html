@@ -60,7 +60,9 @@
       </p>
 
       <p>
-        We want to solve the problem
+        We will look at <span class="us">one broadcaster</span> who wants his
+        posts to gain more user attention and see how he can regulate his
+        posting to do that.
       </p>
 
       <h2>Feeds in social media</h2>
@@ -74,13 +76,17 @@
 
       <p>
         Hence, a heuristic approach to seeking user attention would be to
-        minimize the rank (\( r(t) \))of our posts on the follower's feed.
+        minimize the rank (\( r(t) \)) of our posts on the follower's feed.
         <span class="marginnote">The rank \( r(t) \) is the position of the
         latest post by a broadcaster on a follower's feed.</span>
       </p>
 
       <figure>
-        <span class="marginnote">Feed of a follower contains broadcasts from several sources, including from a source interested in staying on top of the follower's feed.</span>
+        <span class="marginnote">
+          Feed of a follower contains broadcasts from several sources,
+          including from a source interested in staying on top of the
+          follower's feed.
+        </span>
         <img src="img/when-to-post-problem-demo.svg" alt="When to post problem" class="full-width">
       </figure>
 
@@ -104,7 +110,7 @@
         $$
         r(t+dt) = \left\{
           \begin{array}{ccccl}
-            & (r(t)+1) & {\color{others} dM(t)} & {\color{us} (1-dN(t))} & \text{Increases by one}\\
+            & (r(t)+1) & {\color{other} dM(t)} & {\color{us} (1-dN(t))} & \text{Increases by one}\\
           + & 0 & {\color{other}(1 - dM(t))} & {\color{us} dN(t)} & \text{Becomes zero}\\
           + & r(t) & {\color{other} (1 - dM(t))} & {\color{us} (1- dN(t))} & \text{Remains the same}
           \end{array}
@@ -119,15 +125,15 @@
         The evolution of \( \color{us} N(t) \) is under the control of the <span class="us">broadcaster</span>,
         whereas the \( \color{other} M(t) \) may behave in various ways:
         <span class="marginnote">
-          <a href="http://www.kdd.org/kdd2016/subtopic/view/smart-broadcasting-do-you-want-to-be-seen">Karimi et. al.</a> assume that the broadcasting frequency of <span class="others">other broadcasters</span> is piecewise constant.
+          <a href="http://www.kdd.org/kdd2016/subtopic/view/smart-broadcasting-do-you-want-to-be-seen">Karimi et. al.</a> assume that the broadcasting frequency of <span class="other">other broadcasters</span> is piecewise constant.
         </span>
       </p>
 
       <ul>
         <li>It may be nearly constant (e.g. large number of diverse followees)</li>
         <li>It may have bursts (e.g. breaking news posts)</li>
-        <li>It may be piecewise constant with some period (e.g. most followees are from a particular time zones)
-        </li>
+        <li>It may be piecewise constant with some period (e.g. most followees
+          are from a particular time zones)</li>
         <li>\( \ldots \)</li>
       </ul>
 
@@ -180,8 +186,8 @@
       <p>
         This function penalizes high ranks quadratically
         \( \frac{1}{2} s \,r^2(t) \)
-        while also containing a regularization term \( \frac{1}{2} q\,u^2(t) \),
-        which prevents the broadcaster from posting with very high intensity.
+        while also containing the term \( \frac{1}{2} q\,u^2(t) \), which
+        trades off posting with a high frequency and maintaining a low rank.
       </p>
 
       <p>
@@ -206,13 +212,58 @@
         $$
       </p>
 
-      <h2>The Algorithm</h2>
+      <p>
+        This function states that the rate at which <span class="us">the broadcaster</span> must post messages (i.e. the <em>urgency</em> of posting), should be proportional to how <em>bad</em> his rank \( r(t) \) is.
+        Hence, he will have to post <em>faster</em> to stay where he original was (i.e. at the top).
+      </p>
+
+      <p>
+        Determining the rate requires only knowing the rank of
+        <span class="us">the broadcaster</span> on the feed(s) of his follower(s).
+        This information can be calculated in \( \mathcal{O}(1) \) time, given
+        the stream of posts from <span class="other">other broadcasters</span>,
+        the sampling, as shown <a href="#sampling">below</a>, too takes only
+        \( \mathcal{O}(1) \) time, making this an efficient online algorithm
+        for determining when-to-post.
+      </p>
+
+      <h2 id="sampling">The Sampling</h2>
 
       <p>
         <label class="margin-toggle" for="eqn-user-rate">⊕</label>
         <input id="eqn-user-rate" class="margin-toggle" type="checkbox">
         <span class="marginnote">
         </span>
+
+        Now that we know what how <span class="us">the broadcaster</span> should
+        regulate his messages, we have to determine when exactly should he post.
+      </p>
+
+      <p>
+        However, thanks to the superposition property of Poisson point processes
+        we can treat each <em>jump</em> as the start of a new Poisson process.
+      </p>
+
+      <figure>
+        <label class="margin-toggle" for="superposition">⊕</label>
+        <input id="superposition" class="margin-toggle" type="checkbox">
+        <span class="marginnote">The process \( u(t) \) can be seen as a super-position of multiple Poisson processes starting at the times the rank \( r(t) \) changes, i.e. when <span class="other">other broadcasters</span> post messages.</span>
+        <img src="img/superposition.svg" alt="u(t) is superposition of multiple point processes" class="full-width">
+      </figure>
+
+      <p>
+        Now to draw the time of first event for \( u(t) \), i.e. when <span class="us">our broadcaster</span> posts, we can draw samples from all point processes and take the minimum.
+      </p>
+
+      <figure>
+        <label class="margin-toggle" for="sampling">⊕</label>
+        <input id="sampling" class="margin-toggle" type="checkbox">
+        <span class="marginnote">The process \( u(t) \) can be seen as a super-position of multiple Poisson processes starting at the times the rank \( r(t) \) changes, i.e. when <span class="other">other broadcasters</span> post messages.</span>
+        <img src="img/sampling.svg" alt="sampling u(t) involves taking the minimum of all samples for individual processes" class="full-width">
+      </figure>
+
+      <p>
+        Since drawing one sample is an \( \mathcal{O}(1) \) operation, and we draw one sample each time <span class="other">other broadcasters</span> post, we only have to take \( \mathcal{O}(M(t_f)) \) samples.
       </p>
 
       <h2>Demo</h2>
@@ -250,6 +301,14 @@
       <p>
         We compared <span class="red-queen">RedQueen</span> against an Oracle
         and the state of the art and saw that our algorithm fared favourably.
+
+        Tests were also conducted using real tweets from Twitter and over 2000 users.
+        <span class="red-queen">RedQueen</span> was able to obtain better
+        average rank as well as higher time in the top-1 compared to the real
+        users as well as against the current state of the art.
+
+        For details, see <a href="https://arxiv.org/abs/1610.05773">our paper</a>.
+
       </p>
 
 
@@ -272,7 +331,7 @@
       <p>
         The <em class="red-queen">RedQueen</em> icon was made by <a href="http://www.flaticon.com/authors/zlatko-najdenovski" title="Zlatko Najdenovski">Zlatko Najdenovski</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a>.
 
-        Other icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
+        Other icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> are licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
       </p>
     </section>
   </article>
