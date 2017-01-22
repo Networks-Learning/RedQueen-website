@@ -56,7 +56,6 @@ var feed_vis = function () {
     };
 
     var banner_color = 'black';
-
     var banner = 'Unknown algorithm';
 
     function feed_vis(selection) {
@@ -79,17 +78,54 @@ var feed_vis = function () {
                 .attr('text-anchor', 'middle')
                 .attr('dy', '0.35em');
 
-            var tweetContainer = svg.selectAll('.tweets_container')
+            var tweet_container = svg.selectAll('.tweets_container')
                                     .data([0]);
 
-            tweetContainer = tweetContainer
+            tweet_container = tweet_container
                               .enter()
                                 .append('g')
                                 .classed('tweets_container', true)
                                 .attr('transform', 'translate(0,' + banner_height + ')')
-                              .merge(tweetContainer);
+                              .merge(tweet_container);
 
-            var tweets = tweetContainer
+            var our_rank = null;
+            for (var ii = 0; ii < tweet_list.length; ii++) {
+                if (tweet_list[ii].source === 'user') {
+                    our_rank = ii;
+                    break;
+                }
+            }
+
+            console.log('our_rank = ', our_rank);
+
+            var tweet_marker = tweet_container.selectAll('.marker')
+                                  .data((our_rank !== null) ? [our_rank] : []);
+
+            tweet_marker = tweet_marker
+                                .enter()
+                                  .append('text')
+                                  .classed('marker', true)
+                                  .attr('opacity', 1.0)
+                                  .attr('dy', '.5em')
+                                  .attr('dx', '-.2em')
+                                  .attr('text-anchor', 'end')
+                                  .style('font-size', '0.4em')
+                                .merge(tweet_marker);
+
+            tweet_marker
+                .transition()
+                .attr('x', (width - tweet_width) / 2)
+                .attr('y', tweet_height * (our_rank + 1))
+                .text('r(t) = ' + our_rank)
+
+            tweet_marker
+              .exit()
+                .transition()
+                .attr('y', tweet_height * (feed_length + 2))
+                .attr('opacity', 1e-6)
+                .remove();
+
+            var tweets = tweet_container
                            .selectAll('rect.tweet')
                            .data(tweet_list.slice(0, feed_length),
                                  function (tweet) { return tweet.id; });
@@ -101,7 +137,7 @@ var feed_vis = function () {
                     function (d, i) {
                         // If the source is 'user', enter from left, else from
                         // right.
-                        return d.source === 'user' ? 0 : 100 - tweet_width / 2;
+                        return d.source === 'user' ? 0 : width - tweet_width / 2;
                     })
                 .attr('y', 0)
                 .attr('width', tweet_width / 2)
