@@ -65,13 +65,17 @@ svg {
 }
 
 .button-play {
-    color: white;
-    background: rgb(28, 184, 65); /* this is a green */
+    color: #eee;
+    font-size: 70%;
+    /* background: rgb(28, 184, 65); /* this is a green */
+    background: #333;
 }
 
 .button-stop {
-    color: white;
-    background: rgb(202, 60, 60); /* this is a maroon */
+    color: #eee;
+    font-size: 70%;
+    /* background: rgb(202, 60, 60); /* this is a maroon */
+    background: #333;
 }
 
 .centered {
@@ -92,4 +96,8 @@ svg {
 
 .banner text, .label text, .tick text {
     font-size: 75%;
+}
+
+section > ul, section > ol {
+    width: 85%; /* Addressing bug #111 in tufte-css */
 }
