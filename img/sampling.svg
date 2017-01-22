@@ -26,8 +26,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.979899"
-     inkscape:cx="157.22512"
-     inkscape:cy="93.504023"
+     inkscape:cx="273.57847"
+     inkscape:cy="99.395783"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -220,5 +220,17 @@
          id="tspan7715"
          x="307.31747"
          y="609.92957"> </tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:100%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="362.66815"
+       y="505.06982"
+       id="text9516"
+       sodipodi:linespacing="100%"><tspan
+         sodipodi:role="line"
+         id="tspan9518"
+         x="362.66815"
+         y="505.06982"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.50000095px;line-height:100%;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start">Δt ~ Exp(√(s/q))</tspan></text>
   </g>
 </svg>
