@@ -98,6 +98,8 @@ svg {
     font-size: 75%;
 }
 
-section > ul, section > ol {
-    width: 85%; /* Addressing bug #111 in tufte-css */
+@media (max-width: 760px) {
+    section > ul, section > ol {
+        width: 85%; /* Addressing bug #111 in tufte-css */
+    }
 }
