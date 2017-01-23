@@ -33,13 +33,16 @@
       $$
     </div>
 
-    <h1 class="red-queen">RedQueen</h1>
+   <img src="img/red_queen.512.png" alt="RedQueen"
+       aria="hidden" class="red-queen-icon" />
+    <h1 class="red-queen">
+        RedQueen
+    </h1>
+
     <p class="subtitle">
       <label class="margin-toggle" for="fig-redqueen">⊕</label>
       <input id="fig-redqueen" class="margin-toggle" type="checkbox">
       <span class="marginnote">
-        <img src="img/red_queen.512.png" alt="RedQueen"
-             aria="hidden" class="red-queen-icon" />
       </span>
       An Online Algorithm for Smart Broadcasting in Social Networks
     </p>
@@ -53,7 +56,7 @@
 
       <p>
         User attention is becoming a sparse commodity. This is evinced by the
-        proliferation of studies which point at information overload or at the
+        proliferation of studies which point to information overload or to the
         plethora of articles proclaiming to recommend when to post your messages
         to maximise the probability of your followers reacting to the post.
         <!-- Can give references here -->
@@ -108,12 +111,6 @@
         If the feeds are inverse-chronologically sorted, then the dynamics of the rank \( r(t) \) of the <span class="us">broadcaster</span> in the feed can be modeled using the following equation:
         <label class="margin-toggle" for="generalize-rank-algo">⊕</label>
         <input id="generalize-rank-algo" class="margin-toggle" type="checkbox">
-        <span class="marginnote">
-          Our method can generalize to any ordering of
-          posts as long as we can reverse-engineer the algorithm and write out
-          the dynamics of \( r(t) \).
-        </span>
-
         $$
         r(t+dt) = \left\{
           \begin{array}{ccccl}
@@ -126,16 +123,17 @@
 
         where \( {\color{other} dM(t)}, {\color{us} dN(t)} \in \{0, 1\} \) denote the presence or absence of a
         <em>broadcast</em> in the respective point process at time \( t \).
+        <span class="marginnote">
+          Our method can generalize to any ordering of
+          posts as long as we can reverse-engineer the algorithm and write out
+          the dynamics of \( r(t) \).
+        </span>
+
       </p>
 
       <p>
         The evolution of \( \color{us} N(t) \) is under the control of the <span class="us">broadcaster</span>,
         whereas the \( \color{other} M(t) \) may behave in various ways:
-        <label class="margin-toggle" for="karimi-assumption">⊕</label>
-        <input id="karimi-assumption" class="margin-toggle" type="checkbox">
-        <span class="marginnote">
-          <a href="http://www.kdd.org/kdd2016/subtopic/view/smart-broadcasting-do-you-want-to-be-seen">Karimi et. al.</a> assume that the broadcasting frequency of <span class="other">other broadcasters</span> is piecewise constant.
-        </span>
       </p>
 
       <ul>
@@ -147,6 +145,16 @@
       </ul>
 
       <p>
+        <label class="margin-toggle" for="karimi-assumption">⊕</label>
+        <input id="karimi-assumption" class="margin-toggle" type="checkbox">
+        <span class="marginnote">
+          <a href="http://www.kdd.org/kdd2016/subtopic/view/smart-broadcasting-do-you-want-to-be-seen">
+            Karimi et. al.
+          </a>
+          assume that the broadcasting frequency of
+          <span class="other">other broadcasters</span> is piecewise constant.
+        </span>
+
         Thanks to our novel formulation of the problem, our solution
         <span class="red-queen">RedQueen</span> is able to handle all of these
         cases, <em>without needing to infer the parameters of any process.</em>
@@ -155,16 +163,17 @@
       <h2>Objective</h2>
 
       <p>
-        Now one can attempt to optimize for many different kind of losses
-        to find our optimal rate of posting. One such choice, taken by Karimi et. al.
-        is to optimize for <em>Time spent in top-k</em>, wherein, they find the
-        rates which maximize the time the broadcaster's posts spend with \( r(t) \lt k \).
-        However, we choose the following quadratic loss function:
+        Now that we have formulated the problem in a form amenable to a
+        <a href="https://en.wikipedia.org/wiki/Hamilton%E2%80%93Jacobi%E2%80%93Bellman_equation#Extension_to_stochastic_problems">stochastic control problem</a>,
+        we have to decide on a loss function to optimize for.
+
+        We choose the following loss function:
 
         <label class="margin-toggle" for="generalize-multiple-followers">⊕</label>
         <input id="generalize-multiple-followers" class="margin-toggle" type="checkbox">
         <span class="marginnote">
-          This objective can be generalized for multiple followers. For details, see <a href="https://arxiv.org/abs/1610.05773">our paper</a>.
+          This objective can be generalized for multiple followers. For details,
+          see <a href="https://arxiv.org/abs/1610.05773">our paper</a>.
         </span>
 
         <!--
@@ -195,6 +204,16 @@
       </p>
 
       <p>
+        <label class="margin-toggle" for="karimi-loss">⊕</label>
+        <input id="karimi-loss" class="margin-toggle" type="checkbox">
+        <span class="marginnote">
+          Karimi et. al. optimize for <em>Time spent in top-k</em>, wherein, they find the
+          rates which maximize the time the broadcaster's posts spend with \( r(t) \lt k \).
+          In <a href="https://arxiv.org/abs/1610.05773">our paper</a>, we show
+          that our approach, though optimizing for a different loss,
+          still outperforms the offline method.
+        </span>
+
         This function penalizes high ranks quadratically
         \( \frac{1}{2} s \,r^2(t) \)
         while also containing the term \( \frac{1}{2} q\,u^2(t) \), which
@@ -263,36 +282,62 @@
       <figure>
         <label class="margin-toggle" for="superposition">⊕</label>
         <input id="superposition" class="margin-toggle" type="checkbox">
-        <span class="marginnote">The process \( u(t) \) can be seen as a super-position of multiple Poisson processes starting at the times the rank \( r(t) \) changes, i.e. when <span class="other">other broadcasters</span> post messages.</span>
-        <img src="img/superposition.svg" alt="u(t) is superposition of multiple point processes" class="full-width">
+        <span class="marginnote">
+          The process \( u(t) \) can be seen as a super-position of multiple
+          Poisson processes starting at the times the rank \( r(t) \) changes,
+          i.e. when <span class="other">other broadcasters</span> post
+          messages.
+        </span>
+        <img src="img/superposition.svg"
+             alt="u(t) is superposition of multiple point processes"
+             class="full-width">
       </figure>
 
       <p>
-        Now to draw the time of first event for \( u(t) \), i.e. when <span class="us">our broadcaster</span> posts, we can draw samples from all point processes and take the minimum.
+        Now to draw the time of first event for \( u(t) \), i.e. when
+        <span class="us">our broadcaster</span> posts, we can draw samples
+        from all point processes and take the minimum.
       </p>
 
       <figure>
         <label class="margin-toggle" for="sampling">⊕</label>
         <input id="sampling" class="margin-toggle" type="checkbox">
-        <span class="marginnote">The process \( u(t) \) can be seen as a super-position of multiple Poisson processes starting at the times the rank \( r(t) \) changes, i.e. when <span class="other">other broadcasters</span> post messages.</span>
-        <img src="img/sampling.svg" alt="sampling u(t) involves taking the minimum of all samples for individual processes" class="full-width">
+        <span class="marginnote">
+          Since \( u(t) \) is a sum of several independent Poisson processes,
+          the first event which occurs according to it is the earliest of the
+          first events of each of its components.
+        </span>
+        <img src="img/sampling.svg"
+              alt="sampling u(t) involves taking the minimum of all samples for individual processes"
+              class="full-width">
       </figure>
 
       <p>
-        Since drawing one sample is an \( \mathcal{O}(1) \) operation, and we draw one sample each time <span class="other">other broadcasters</span> post, we only have to take \( \mathcal{O}(M(t_f)) \) samples.
+        Since drawing one sample is an \( \mathcal{O}(1) \) operation, and we
+        draw one sample each time <span class="other">other broadcasters</span>
+        post, we only have to take \( \mathcal{O}(M(t_f)) \) samples.
       </p>
 
       <h2>Demo</h2>
 
       <p class="pure-button-group centered sans" role="group" aria-label="interactive buttons">
-        <button class="pure-button button-play js-play"><i class="fa fa-play"></i> Play</button>
-        <button class="pure-button button-stop js-stop"><i class="fa fa-stop"></i> Stop</button>
+        <button class="pure-button button-play js-play">
+          <i class="fa fa-play"></i> Play
+        </button>
+        <button class="pure-button button-stop js-stop">
+          <i class="fa fa-stop"></i> Stop
+        </button>
       </p>
 
       <figure>
         <label class="margin-toggle" for="redqueen-demo-caption">⊕</label>
         <input id="redqueen-demo-caption" class="margin-toggle" type="checkbox">
-        <span class="marginnote">Interactive demo showing the performance (i.e. \( r(t) \)) of <span class="red-queen">RedQueen</span> against a Poisson broadcaster (who posts at random times) against a bursty stream of tweets coming from other broadcasters.</span>
+        <span class="marginnote">
+          Interactive demo showing the performance (i.e. \( r(t) \)) of
+          <span class="red-queen">RedQueen</span> against a Poisson broadcaster
+          (who posts at random times) against a bursty stream of tweets coming
+          from other broadcasters.
+        </span>
 
         <div class="long vis-aspect">
           <svg id="perf-1-vis" width="100%" class="content" viewBox="0 0 300 100"></svg>
@@ -331,7 +376,10 @@
       <h2>The Name <em class="red-queen">RedQueen</em></h2>
 
       <p>
-        The name is taken from the <a href="https://en.wikipedia.org/wiki/Red_Queen">Red Queen's race</a> incident in <a href="https://en.wikipedia.org/wiki/Lewis_Carroll">Lewis Carroll</a>'s book <a href="https://en.wikipedia.org/wiki/Through_the_Looking-Glass">Through the Looking Glass</a>. In particular, the Queen's quote:
+        The name is taken from the <a href="https://en.wikipedia.org/wiki/Red_Queen">Red Queen's race</a>
+        incident in <a href="https://en.wikipedia.org/wiki/Lewis_Carroll">Lewis Carroll</a>'s
+        book <a href="https://en.wikipedia.org/wiki/Through_the_Looking-Glass">Through the Looking Glass</a>.
+        In particular, the Queen's quote:
 
         <div class="epigraph">
           <blockquote>

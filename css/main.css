@@ -57,7 +57,12 @@ svg {
 }
 
 .red-queen-icon {
-    max-width: 128px;
+    max-width: 64px;
+    float: left;
+}
+
+.red-queen-icon + h1 {
+    margin-top: 0px;
 }
 
 .red-queen {
