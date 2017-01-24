@@ -1,0 +1,89 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <!-- MathJax configuration must come before MathJAX is loaded even if async -->
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      TeX: {
+        extensions: [ "color.js" ]
+      }
+    });
+  </script>
+
+  <title>RedQueen</title>
+
+  <link rel="favicon" href="../favicon.ico">
+
+  <link rel="stylesheet" href="css/reveal.css">
+  <link rel="stylesheet" href="css/theme/solarized.css">
+
+  <!-- Theme used for syntax highlighting of code -->
+  <link rel="stylesheet" href="lib/css/zenburn.css">
+
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../js/main.js">
+
+  <!-- Printing and PDF exports -->
+  <script>
+    var link = document.createElement( 'link' );
+    link.rel = 'stylesheet';
+    link.type = 'text/css';
+    link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+    document.getElementsByTagName( 'head' )[0].appendChild( link );
+  </script>
+</head>
+<body>
+  <div style="display: none">
+    $$
+        \definecolor{us}{RGB}{239, 168, 86}
+        \definecolor{other}{RGB}{74, 179, 193}
+    $$
+  </div>
+
+  <div class="reveal">
+    <div class="slides">
+      <section>
+
+        <img src="../img/red_queen.512.png" alt="RedQueen"
+           aria="hidden" class="red-queen-icon" />
+        <h1 class="red-queen">
+            RedQueen
+        </h1>
+
+        <p class="subtitle">
+          An Online Algorithm for Smart Broadcasting in Social Networks
+        </p>
+        <p class="subtitle">
+          <a href="http://www.wsdm-conference.org/2017/">WSDM, 2017</a>; <a href="https://arxiv.org/abs/1610.05773">arxiv.org/abs/1610.05773</a>
+        </p>
+
+      </section>
+
+      <section>
+      </section>
+    </div>
+  </div>
+
+  <script src="lib/js/head.min.js"></script>
+  <script src="js/reveal.js"></script>
+
+  <script>
+    // More info https://github.com/hakimel/reveal.js#configuration
+    Reveal.initialize({
+      history: true,
+
+      // More info https://github.com/hakimel/reveal.js#dependencies
+      dependencies: [
+        { src: 'plugin/markdown/marked.js' },
+        { src: 'plugin/markdown/markdown.js' },
+        { src: 'plugin/notes/notes.js', async: true },
+        { src: 'plugin/math/math.js', async: true, config: 'TeX-AMS_SVG' },
+        { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+      ]
+    });
+  </script>
+</body>
+</html>
