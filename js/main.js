@@ -45,7 +45,7 @@ var feed_vis = function () {
     /* Visualize the feed of the user. */
     var feed_length = 50;
     var width = 100, height = 150;
-    var banner_height = 20;
+    var banner_height = 15;
 
     var tweet_height = (height - banner_height) / (feed_length + 3);
     var tweet_width = 50;
@@ -185,10 +185,10 @@ var feed_vis = function () {
 var perf_vis = function () {
     /* Visualize the performance of one algorithm. */
     var margins = {
-        left: 50,
-        right: 10,
-        top: 10,
-        bottom: 50
+        left: 45,
+        right: 0,
+        top: 5,
+        bottom: 25
     };
 
     /* width/height is re-calculated if the margins are changed. */
@@ -288,7 +288,7 @@ var perf_vis = function () {
                                    + (margins.top + height + margins.bottom / 2) + ')')
               .append('text')
                 .attr('text-anchor', 'middle')
-                .attr('dy', '0.35em')
+                .attr('dy', '-0.35em')
                 .text(xLabel)
 
 
@@ -357,7 +357,7 @@ var perf_vis = function () {
 };
 
 
-fetch('data/example1.json')
+fetch(window.DATA_SOURCE ? window.DATA_SOURCE : 'data/example1.json')
 .then(function (resp) {
     return resp.json();
 })
@@ -480,7 +480,7 @@ fetch('data/example1.json')
                 .datum(perf_1_data)
                 .call(
                     perf_instances
-                    .margins({ bottom: 30, top: 30 })
+                    .margins({ bottom: 25, top: 5 })
                     .xLabel('')
                     .yLabel(get_name(chosen_perf_1))
                     .color(perf_colors[0])
@@ -490,7 +490,7 @@ fetch('data/example1.json')
                 .datum(perf_2_data)
                 .call(
                     perf_instances
-                    .margins({ bottom: 50, top: 10 })
+                    .margins({ bottom: 25, top: 5 })
                     .xLabel('time')
                     .yLabel(get_name(chosen_perf_2))
                     .color(perf_colors[1])
