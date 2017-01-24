@@ -1,0 +1,75 @@
+.reveal > .slides > section .left-20 {
+  max-width: 20vw;
+  float: left;
+}
+
+.reveal > .slides > section img, #slide-header-img {
+  border: none;
+  box-shadow: none;
+}
+
+.reveal > .slides > section .right-20 {
+  padding-left: 20vw;
+}
+
+.reveal > .slides > section .authors {
+  font-size: 0.75em;
+}
+
+
+.reveal > .slides > section .authors > a {
+  display: inline-block; /* to prevent line breaks inside names */
+}
+
+.reveal > .slides > section .stretch {
+  display: flex;
+  align-items: center;
+}
+
+.reveal > .slides > section .v-spread {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+/* This role was overtaken by .stretch class provided natively
+.reveal > .slides > section .full-slide-image {
+  margin: 0 auto;
+  max-width: 60vw;
+}
+ */
+
+svg {
+  max-width: 100%
+}
+
+#slides-demo {
+  font-size: 0.25em;
+}
+
+.width-50 {
+  width: 50%;
+}
+
+#demo-header {
+  display: flex;
+  align-itemj: center;
+  justify-content: center;
+}
+
+.reveal > .slides > section .demo-buttons {
+  font-size: 0.25em;
+  padding-left: 2em;
+}
+
+.reveal > .slides > section .demo-buttons::before {
+  content: " ";
+  vertical-align: middle;
+  height: 100%;
+  display: inline-block;
+}
+
+.reveal > .slides > section .demo-buttons button {
+  vertical-align: middle;
+}
+

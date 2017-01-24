@@ -15,6 +15,11 @@
 
   <title>RedQueen</title>
 
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/0.6.2/buttons.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/2.0.1/fetch.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.4.0/d3.min.js"></script>
+
   <link rel="favicon" href="../favicon.ico">
 
   <link rel="stylesheet" href="css/reveal.css">
@@ -24,7 +29,8 @@
   <link rel="stylesheet" href="lib/css/zenburn.css">
 
   <link rel="stylesheet" href="../css/main.css">
-  <link rel="stylesheet" href="../js/main.js">
+  <link rel="stylesheet" href="css/custom.css">
+
 
   <!-- Printing and PDF exports -->
   <script>
@@ -47,23 +53,179 @@
     <div class="slides">
       <section>
 
-        <img src="../img/red_queen.512.png" alt="RedQueen"
-           aria="hidden" class="red-queen-icon" />
-        <h1 class="red-queen">
-            RedQueen
-        </h1>
+        <div class="left-20">
+          <img src="../img/red_queen.512.png" alt="RedQueen" aria="hidden"
+            id="slide-header-img" />
+        </div>
 
-        <p class="subtitle">
-          An Online Algorithm for Smart Broadcasting in Social Networks
-        </p>
-        <p class="subtitle">
-          <a href="http://www.wsdm-conference.org/2017/">WSDM, 2017</a>; <a href="https://arxiv.org/abs/1610.05773">arxiv.org/abs/1610.05773</a>
-        </p>
+        <div class="right-20">
+          <h1 class="red-queen">
+              RedQueen
+          </h1>
 
+          <p class="subtitle">
+            An Online Algorithm for Smart Broadcasting in Social Networks
+          </p>
+
+          <p class="authors">
+            <a href="https://www.linkedin.com/in/ali-zarezade-38063592/">Ali Zarezade</a>, <a href="http://musicallyut.in">Utkarsh Upadhyay</a>, <a href="http://sharif.edu/~rabiee/">Hamid R. Rabiee</a>, <a href="https://people.mpi-sws.org/~manuelgr/">Manuel Gomez-Rodriguez</a>
+          </p>
+        </div>
       </section>
 
       <section>
+        <h3>Social media is a broadcasting platform</h3>
       </section>
+
+      <section>
+        <h3><em>When-to-post</em> &nbsp; is a hot topic</h3>
+        <div class="stretch">
+          <img class="full-width" src="../img/best-time-to-post.png">
+        </div>
+      </section>
+
+      <section>
+        <h3>Follower's attention is scarce</h3>
+        <div class="stretch">
+          <img src="../img/when-to-post-problem-demo.svg" class="full-width">
+        </div>
+      </section>
+
+      <section>
+        <h3>Rank is a proxy for visibility/interaction</h3>
+        <div class="stretch">
+          <img src="../img/when-to-post-problem-visibility.svg" class="full-width">
+        </div>
+      </section>
+
+      <section>
+        <h3>Dynamics of inverse-chronological rank</h3>
+        <div class="stretch v-spread">
+          <img class="width-50" src="../img/when-to-post-problem-dynamics.svg" alt="">
+          $$
+          r(t+dt) = \left\{
+            \begin{array}{ccccl}
+            & (r(t)+1) & {\color{other} dM(t)} & {\color{us} (1-dN(t))} & {\color{other} \text{Others post}}\\
+            + & 0 & {\color{other}(1 - dM(t))} & {\color{us} dN(t)} & {\color{us} \text{Our broadcaster posts}}\\
+            + & r(t) & {\color{other} (1 - dM(t))} & {\color{us} (1- dN(t))} & \text{No-one posts}
+            \end{array}
+            \right.
+          $$
+        </div>
+      </section>
+
+      <section>
+        <h3>Behavior of <span class="other">other broadcasters</span> is complex</h3>
+        <p>Show illustrations for steady, piecewise constant, bursty behavior</p>
+        <!-- <p class="fragment">May change at any point?</p> -->
+        <p class="fragment">Online algorithm works best</p>
+        <p class="fragment"><span class="red-queen">RedQueen</span> does not need to infer <em>any</em> at all!</p>
+      </section>
+
+      <section>
+        <h3>Loss function</h3>
+        <div class="stretch v-spread">
+          $$
+            \begin{align}
+            \underset{u(t_0, t_f]}{\text{minimize}} &
+                \quad \mathbb{E}_{(N, M)(t_0, t_f]}\left[
+                  \int_{t_0}^{t_f} \left( \frac{1}{2} s \,r^2(\tau) + \frac{1}{2} q\,u^2(\tau) \right) d\tau
+                \right] \\
+            \text{subject to} & \quad u(t) \geq 0 \quad \forall t \in (t_0, t_f]
+            \end{align}
+          $$
+
+          <ul>
+            <li>Trades off low rank and high posting rate</li>
+            <li>Leads to an analytical solution</li>
+            <li class="fragment">Generalizes to multiple followers</li>
+          </ul>
+        </div>
+      </section>
+
+      <section>
+        <section>
+          <h3>Optimal rate of posting</h3>
+          <div class="class stretch v-spread">
+            $$
+            \overbrace{u(t)}^{\text{broadcast intensity}} = \sqrt{s/q}\,\underbrace{r(t)}_{\text{Rank in feed}}
+            $$
+            <ul>
+              <li>Simple</li>
+              <li>Efficient</li>
+              <li>Optimal</li>
+            </ul>
+          </div>
+        </section>
+
+        <section>
+          <h3>Sampling from \( u(t) \)</h3>
+          <h4>\( u(t) \) is a superpositioning of Poisson intensities</h4>
+          <div class="stretch">
+            <img src="../img/superposition.svg" alt="" class="full-width">
+          </div>
+        </section>
+
+        <section>
+          <h3>Sampling from \( u(t) \)</h3>
+          <h4>Take a sample from each component and compute minimum</h4>
+          <div class="stretch">
+            <img src="../img/sampling.svg" alt="" class="full-width">
+          </div>
+        </section>
+      </section>
+
+      <section>
+        <h3 id="demo-header">
+          Demo
+          <span class="demo-buttons pure-button-group centered sans" aria-label="interactive buttons">
+            <button class="pure-button button-play js-play">
+              <i class="fa fa-play"></i> Play
+            </button>
+            <button class="pure-button button-stop js-stop">
+              <i class="fa fa-stop"></i> Stop
+            </button>
+          </span>
+        </h3>
+
+        <div id="slides-demo" class="stretch">
+          <div class="width-50">
+            <div class="long vis-aspect">
+              <svg id="perf-1-vis" width="100%" class="content" viewBox="0 0 300 100"></svg>
+            </div>
+
+            <div class="long vis-aspect">
+              <svg id="perf-2-vis" width="100%" class="content" viewBox="0 0 300 100"></svg>
+            </div>
+          </div>
+
+          <div class="width-50 equal-size">
+            <div class="tall left vis-aspect">
+              <svg class="content" id="feed-1-vis" viewBox="0 0 100 150"></svg>
+            </div>
+            <div class="tall right vis-aspect">
+              <svg id="feed-2-vis" class="content" viewBox="0 0 100 150"></svg>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h3>Results</h3>
+      </section>
+
+      <section>
+        <h3>Conclusion</h3>
+
+        <div class="fragment full-width">
+          <p class=>Questions?</p>
+          <div class="right-justified">
+            <p>Utkarsh Upadhyay</p>
+            <p><a href="mailto:utkarshu@mpi-sws.org">utkarshu@mpi-sws.org</a></p>
+          </div>
+        </div>
+      </section>
+
     </div>
   </div>
 
@@ -74,16 +236,23 @@
     // More info https://github.com/hakimel/reveal.js#configuration
     Reveal.initialize({
       history: true,
+      math: {
+        config: 'TeX-AMS_SVG'
+      },
 
       // More info https://github.com/hakimel/reveal.js#dependencies
       dependencies: [
         { src: 'plugin/markdown/marked.js' },
         { src: 'plugin/markdown/markdown.js' },
         { src: 'plugin/notes/notes.js', async: true },
-        { src: 'plugin/math/math.js', async: true, config: 'TeX-AMS_SVG' },
+        { src: 'plugin/math/math.js', async: true },
         { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
       ]
     });
   </script>
+  <script>
+    window.DATA_SOURCE = '../data/example1.json';
+  </script>
+  <script src="../js/main.js"></script>
 </body>
 </html>
