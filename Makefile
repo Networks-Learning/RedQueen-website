@@ -13,5 +13,17 @@ build:
 	@cp -r js/*.js   build/js/
 	@mkdir -p build/img
 	@cp -r img/*  build/img/
+	@mkdir -p build/slides/
+	@rsync -rv --progress slides/* build/slides\
+		--exclude node_modules\
+		--exclude test\
+		--exclude '*~'\
+		--exclude "*.scss"\
+		--exclude "*.orig"\
+		--exclude "demo.html"\
+		--exclude "*.md"\
+		--exclude "package.json"\
+		--exclude "bower.json"\
+		--exclude "Gruntfile.js"
 	@echo "Done."
 
