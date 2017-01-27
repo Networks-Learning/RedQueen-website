@@ -32,6 +32,13 @@
   justify-content: space-around;
 }
 
+.reveal > .slides > section .h-spread {
+  display: flex;
+  justify-content: space-around;
+}
+
+
+
 /* This role was overtaken by .stretch class provided natively
 .reveal > .slides > section .full-slide-image {
   margin: 0 auto;
@@ -49,6 +56,10 @@ svg {
 
 .width-50 {
   width: 50%;
+}
+
+.width-33 {
+  width: 33%;
 }
 
 #demo-header {
