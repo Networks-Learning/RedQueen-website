@@ -70,9 +70,12 @@ svg {
     text-transform: none !important;
 }
 
+.small.pure-button {
+    font-size: 70%;
+}
+
 .button-play {
     color: #eee;
-    font-size: 70%;
     /* background: rgb(28, 184, 65); /* this is a green */
     background: #333;
 }
