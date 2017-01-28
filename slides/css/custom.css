@@ -84,3 +84,9 @@ svg {
   vertical-align: middle;
 }
 
+
+.reveal > .slides > section .footer {
+  font-size: 75%;
+  line-height: 1;
+  text-align: right;
+}
