@@ -2,6 +2,11 @@ var eps = 1e-6;
 
 var perf_colors = ['#D00000', '#1C3144'];
 
+var tweet_colors = {
+    'user':  '#EFA856',
+    'other': '#4AB3C1'
+};
+
 function mb(x, def) {
     return (typeof x === 'undefined') ? def : x;
 }
@@ -18,23 +23,14 @@ function get_name(perf) {
 }
 
 function update_till_time(dst_arr, src_arr, idx, end_time) {
-    var last_value = dst_arr.length > 0 ? dst_arr[dst_arr.length - 1].value : 0;
-
     while (idx < src_arr.length &&
            src_arr[idx][0] < end_time) {
-
-        // simulate a step change.
-        dst_arr.push({
-            time: src_arr[idx][0] - eps,
-            value: last_value
-        });
 
         dst_arr.push({
             time: src_arr[idx][0],
             value: src_arr[idx][1]
         });
 
-        last_value = src_arr[idx][1];
         idx += 1;
     }
 
@@ -49,11 +45,6 @@ var feed_vis = function () {
 
     var tweet_height = (height - banner_height) / (feed_length + 3);
     var tweet_width = 50;
-
-    var tweet_colors = {
-        'user':  '#EFA856',
-        'other': '#4AB3C1'
-    };
 
     var banner_color = 'black';
     var banner = 'Unknown algorithm';
@@ -186,7 +177,7 @@ var perf_vis = function () {
     /* Visualize the performance of one algorithm. */
     var margins = {
         left: 45,
-        right: 0,
+        right: 50,
         top: 5,
         bottom: 25
     };
@@ -196,6 +187,7 @@ var perf_vis = function () {
         height = 100 - margins.top - margins.bottom;
 
     var max_value = 5;
+    var max_count = 10;
 
     var scaled_final_time = 100;
 
@@ -207,12 +199,20 @@ var perf_vis = function () {
                     .range([height, 0])
                     .domain([0, max_value]);
 
+    var y2Scale = d3.scaleLinear()
+                    .range([height, 0])
+                    .domain([0, max_count]);
+
     var xAxis = d3.axisBottom()
                     .scale(xScale)
                     .ticks(0);
 
     var yAxis = d3.axisLeft()
                     .scale(yScale)
+                    .ticks(4);
+
+    var y2Axis = d3.axisRight()
+                    .scale(y2Scale)
                     .ticks(4);
 
     var color = 'steelblue';
@@ -223,10 +223,21 @@ var perf_vis = function () {
     var area = d3.area()
                 .x(function (d) { return xScale(d.time); })
                 .y0(height)
-                .y1(function (d) { return yScale(d.value); });
+                .y1(function (d) { return yScale(d.value); })
+                .curve(d3.curveStepAfter);
+
+    var line = d3.line()
+                .x(function (d) { return xScale(d.time); })
+                .y(function (d) { return y2Scale(d.value); })
+                .curve(d3.curveStepAfter);
 
     function perf_vis(selection) {
-        selection.each(function (performance_numbers, i) {
+        selection.each(function (data, i) {
+
+            var performance_numbers = data.performance_numbers;
+            var count_data = data.count_data;
+
+            // console.log(count_data[count_data.length - 1]);
 
             /* Add a sole g.chart-container */
             var svg = d3.select(this);
@@ -244,7 +255,11 @@ var perf_vis = function () {
 
             init_chart
               .append('path')
-                .attr('class', 'area-chart');
+                .classed('area-chart', true);
+
+            init_chart
+              .append('path')
+                .classed('count-chart', true);
 
             init_chart
               .append('g')
@@ -260,6 +275,13 @@ var perf_vis = function () {
                 .classed('axis', true)
                 .attr('transform',
                       'translate(' + 0 + ',' + 0 + ')');
+
+            init_chart
+              .append('g')
+                .classed('y2', true)
+                .classed('axis', true)
+                .attr('transform',
+                      'translate(' + width + ',' + 0 + ')');
 
             svg.selectAll('.y.label')
                 .data([0])
@@ -277,6 +299,22 @@ var perf_vis = function () {
                 .text(yLabel)
                 .attr('fill', color);
 
+            svg.selectAll('.y2.label')
+                .data([0])
+              .enter()
+                .append('g')
+                .classed('y2', true)
+                .classed('label', true)
+                .attr('transform',
+                      'translate(' + (margins.left + width + (margins.right / 2)) + ','
+                                   + (margins.top + height / 2) + ')' +
+                      'rotate(90)')
+              .append('text')
+                .attr('dy', '0.35em')
+                .attr('text-anchor', 'middle')
+                .text('# of posts')
+                .attr('fill', tweet_colors.user);
+
             svg.selectAll('.x.label')
                 .data([0])
               .enter()
@@ -293,8 +331,9 @@ var perf_vis = function () {
 
 
             // Updating the chart now.
-            yScale = yScale.domain([0, max_value]);
-            xScale = xScale.domain([0, scaled_final_time]);
+            yScale  = yScale.domain([0, max_value]);
+            xScale  = xScale.domain([0, scaled_final_time]);
+            y2Scale = y2Scale.domain([0, max_count]);
 
             d3.select(this)
                 .select('.x.axis')
@@ -304,13 +343,30 @@ var perf_vis = function () {
                 .select('.y.axis')
                 .call(yAxis);
 
+            d3.select(this)
+                .select('.y2.axis')
+                .call(y2Axis);
+
             var chart = d3.select(this)
                           .select('path.area-chart')
                           .datum(performance_numbers)
                           .attr('d', area)
                           .attr('fill', color);
+
+            var counting = d3.select(this)
+                            .select('path.count-chart')
+                            .datum(count_data)
+                            .attr('d', line)
+                            .attr('stroke', tweet_colors.user)
+                            .attr('fill', 'none');
         });
     }
+
+    perf_vis.max_count = function (_) {
+        if (!arguments.length) return max_count;
+        max_count = _;
+        return perf_vis;
+    };
 
     perf_vis.color = function (_) {
         if (!arguments.length) return color;
@@ -373,9 +429,18 @@ fetch(window.DATA_SOURCE ? window.DATA_SOURCE : 'data/example1.json')
     var present_perfs = Object.keys(json_data.broadcasts);
     var chosen_perf_1 = present_perfs[0];
     var chosen_perf_2 = present_perfs[1];
-    var perf_1 = json_data.broadcasts[chosen_perf_1];
-    var perf_2 = json_data.broadcasts[chosen_perf_2];
+
     console.log('chosen_perf_1 = ', chosen_perf_1, ' chosen_perf_2 = ', chosen_perf_2);
+
+    var perf_1 = json_data.broadcasts[chosen_perf_1];
+    var perf_1_count = perf_1.post_times.length;
+
+    var perf_2 = json_data.broadcasts[chosen_perf_2];
+    var perf_2_count = perf_2.post_times.length;
+
+    var perf_max_count = Math.max(perf_1_count, perf_2_count);
+
+    var perf_instances = perf_instances.max_count(perf_max_count);
 
     var max_real_time = 1 * 60 * 1000; // Run the demo for this long (ms)
 
@@ -396,6 +461,9 @@ fetch(window.DATA_SOURCE ? window.DATA_SOURCE : 'data/example1.json')
     var perf_1_data = [], perf_1_data_idx = 0;
     var perf_2_data = [], perf_2_data_idx = 0;
     var perf_max_value = 0;
+
+    var perf_1_count = [{ time: 0, value: 0 }];
+    var perf_2_count = [{ time: 0, value: 0 }];
 
     function update_all_vis(vis_state) {
 
@@ -438,6 +506,16 @@ fetch(window.DATA_SOURCE ? window.DATA_SOURCE : 'data/example1.json')
                 tweets_2.unshift(tweet);
             }
 
+            perf_1_count.push({
+                time: next_tick,
+                value: vis_state.perf_post_idx[0]
+            });
+
+            perf_2_count.push({
+                time: next_tick,
+                value: vis_state.perf_post_idx[1]
+            });
+
             // Updating the feed visualisations.
             tweets_1 = tweets_1.slice(0, feed_length);
             tweets_2 = tweets_2.slice(0, feed_length);
@@ -477,7 +555,10 @@ fetch(window.DATA_SOURCE ? window.DATA_SOURCE : 'data/example1.json')
                                               perf_instances.max_value()));
 
             d3.select('#perf-1-vis')
-                .datum(perf_1_data)
+                .datum({
+                    performance_numbers: perf_1_data,
+                    count_data: perf_1_count
+                })
                 .call(
                     perf_instances
                     .margins({ bottom: 25, top: 5 })
@@ -487,7 +568,10 @@ fetch(window.DATA_SOURCE ? window.DATA_SOURCE : 'data/example1.json')
                 );
 
             d3.select('#perf-2-vis')
-                .datum(perf_2_data)
+                .datum({
+                    performance_numbers: perf_2_data,
+                    count_data: perf_2_count
+                })
                 .call(
                     perf_instances
                     .margins({ bottom: 25, top: 5 })
