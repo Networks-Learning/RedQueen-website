@@ -160,7 +160,11 @@
           <ul>
             <li>Trades off low rank and high posting rate</li>
             <li>Leads to an analytical solution</li>
-            <li class="fragment">Generalizes to multiple followers</li>
+            <li class="fragment">Generalizes to
+              <ul>
+                <li>multiple followers: &nbsp; \( r(t) \rightarrow \vec{r}(t) \)</li>
+                <li>time varying weights: &nbsp; \( s \rightarrow \vec{s}(t) \)</li>
+              </ul>
           </ul>
         </div>
       </section>
@@ -181,16 +185,16 @@
         </section>
 
         <section>
-          <h3>Sampling from \( u(t) \)</h3>
-          <h4>\( u(t) \) is a superpositioning of Poisson intensities</h4>
+          <h3>\( u(t) \) to <em>when-to-post</em></h3>
+          <h4>\( u(t) \) is a sum of Poisson intensities</h4>
           <div class="stretch">
             <img src="../img/superposition.svg" alt="" class="full-width">
           </div>
         </section>
 
         <section>
-          <h3>Sampling from \( u(t) \)</h3>
-          <h4>Take a sample from each component and compute minimum</h4>
+          <h3>\( u(t) \) to <em>when-to-post</em></h3>
+          <h4>Take one sample per component and compute the minimum</h4>
           <div class="stretch">
             <img src="../img/sampling.svg" alt="" class="full-width">
           </div>
