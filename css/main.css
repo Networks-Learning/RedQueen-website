@@ -118,6 +118,11 @@ svg {
     justify-content: space-around;
 }
 
+.metric-control .option {
+    display: flex;
+    align-items: center;
+}
+
 .metric-control .disabled {
-    color: #777;
+    opacity: 0.5;
 }
