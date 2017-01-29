@@ -1,6 +1,8 @@
 var eps = 1e-6;
 
 var perf_colors = ['#D00000', '#1C3144'];
+var perf_metric = 'avg_rank'; // or 'time_at_top';
+var perf_choice_enabled = true;
 
 var tweet_colors = {
     'user':  '#EFA856',
@@ -413,7 +415,7 @@ var perf_vis = function () {
 };
 
 
-fetch(window.DATA_SOURCE ? window.DATA_SOURCE : 'data/example1.json')
+fetch(window.DATA_SOURCE ? window.DATA_SOURCE : 'data/example2.json')
 .then(function (resp) {
     return resp.json();
 })
@@ -537,12 +539,12 @@ fetch(window.DATA_SOURCE ? window.DATA_SOURCE : 'data/example1.json')
 
             // Updating the performance visualisations.
             perf_1_data_idx = update_till_time(perf_1_data,
-                                               perf_1.performance.avg_rank,
+                                               perf_1.performance[perf_metric],
                                                perf_1_data_idx,
                                                next_tick);
 
             perf_2_data_idx = update_till_time(perf_2_data,
-                                               perf_2.performance.avg_rank,
+                                               perf_2.performance[perf_metric],
                                                perf_2_data_idx,
                                                next_tick);
 
@@ -617,6 +619,14 @@ fetch(window.DATA_SOURCE ? window.DATA_SOURCE : 'data/example1.json')
 
     d3.select('.js-play')
         .on('click', function () {
+
+            /* Disabled choosing the metric */
+            perf_choice_enabled = false;
+            d3.selectAll('.js-option')
+                .classed('disabled', true)
+                .selectAll('.js-perf-metric')
+                .attr('disabled', true)
+
             update_all_vis(vis_state);
         });
 
@@ -627,6 +637,17 @@ fetch(window.DATA_SOURCE ? window.DATA_SOURCE : 'data/example1.json')
                 timer_id = null;
             }
         });
+
+    d3.selectAll('.js-perf-metric')
+        .on('change', function () {
+            console.log('Setting to ', this.value);
+            if (perf_choice_enabled && this.checked) {
+                perf_metric = this.value;
+            }
+        });
+
+
+
 
     // function update_randomly(tweets, id, elem_id) {
     //     var rand = Math.random();

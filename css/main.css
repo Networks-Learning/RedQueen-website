@@ -112,3 +112,12 @@ svg {
         width: 85%; /* Addressing bug #111 in tufte-css */
     }
 }
+
+.metric-control {
+    display: flex;
+    justify-content: space-around;
+}
+
+.metric-control .disabled {
+    color: #777;
+}
