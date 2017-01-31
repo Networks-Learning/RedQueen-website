@@ -46,7 +46,6 @@
       <a href="http://www.wsdm-conference.org/2017/">WSDM, 2017</a>; <a href="https://arxiv.org/abs/1610.05773">arxiv.org/abs/1610.05773</a>
     </p>
 
-
     <section>
       <h2>Introduction</h2>
 
@@ -59,37 +58,40 @@
       </p>
 
       <p>
-        We will look at <span class="us">one broadcaster</span> who wants his
-        posts to gain more user attention and see how he can regulate his
-        posting to do that.
+        We will look at <span class="us">a broadcaster</span> who wants his
+        posts to gain more attention on the feed of one follower and see how he
+        can regulate his posting to do that.
       </p>
 
       <h2>Feeds in social media</h2>
       <p>
         Feeds in social media display posts of all <em>followees</em> of the
-        user in some order. However, the user does not pay equal attention to
-        all posts. Instead, more attention is given to the posts on top of the
-        feed while the posts which disappear <em>underneath the fold</em> are
-        given very little attention.
+        user (the follower) in some order. However, the follower does not pay
+        equal attention to all posts. Instead, more attention is given to the
+        posts on top of the feed while the posts which disappear <em>underneath
+          the fold</em> are given little attention.
+
+        <label class="margin-toggle sidenote-number" for="sn-overload-citation"></label>
+        <input id="sn-overload-citation" class="margin-toggle" type="checkbox">
+        <span class="sidenote">
+          See <a href="http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0098914">Leveraging Position Bias to Improve Peer Recommendation</a>, <a href="https://arxiv.org/abs/1605.02660">Information is not a Virus, and Other Consequences of Human Cognitive Limits</a>, <a href="https://people.mpi-sws.org/~manuelgr/pubs/efficiency-wsdm16.pdf">On the Efficiency of the Information Networks in Social Media</a>
+        </span>
       </p>
 
       <p>
-        Hence, a heuristic approach to seeking user attention would be to
-        minimize the rank (\( r(t) \)) of our posts on the follower's feed.
-
-        <label class="margin-toggle" for="rank-defn">⊕</label>
-        <input id="rank-defn" class="margin-toggle" type="checkbox">
-        <span class="marginnote">The rank \( r(t) \) is the position of the
-        latest post by a broadcaster on a follower's feed.</span>
+        Let us define the rank \( r(t) \) as the position of the <em>first</em>
+        post by the broadcaster on the follower's feed. It is a measure of
+        visibility of the broadcasters post. One way of seeking the follower's
+        attention is to minimize the rank (\ r(t) \).
       </p>
 
       <figure>
         <label class="margin-toggle" for="feed-figure">⊕</label>
         <input id="feed-figure" class="margin-toggle" type="checkbox">
         <span class="marginnote">
-          Feed of a follower contains broadcasts from several sources,
-          including from a source interested in staying on top of the
-          follower's feed.
+          Feed of a follower contains posts broadcast by several sources,
+          including <span class="us">our broadcaster</span>, i.e. the source
+          we are interested in helping to remain at the top.
         </span>
         <img src="img/when-to-post-problem-demo.svg" alt="When to post problem" class="full-width">
       </figure>
@@ -104,7 +106,8 @@
         -->
 
       <p>
-        If the feeds are inverse-chronologically sorted, then the dynamics of the rank \( r(t) \) of the <span class="us">broadcaster</span> in the feed can be modeled using the following equation:
+        In order to minimize the rank, we first need to understand how it evolves.
+        If the feeds are sorted by the time of the post, with most recent posts appearing on top, then the dynamics of the rank \( r(t) \) of the <span class="us">broadcaster</span> in the feed can be modeled using the following equation:
         <label class="margin-toggle" for="generalize-rank-algo">⊕</label>
         <input id="generalize-rank-algo" class="margin-toggle" type="checkbox">
         $$
@@ -124,11 +127,10 @@
           posts as long as we can reverse-engineer the algorithm and write out
           the dynamics of \( r(t) \).
         </span>
-
       </p>
 
       <p>
-        The evolution of \( \color{us} N(t) \) is under the control of the <span class="us">broadcaster</span>,
+        The evolution of \( \color{us} N(t) \) is under the control of <span class="us">the broadcaster</span>,
         whereas the \( \color{other} M(t) \) may behave in various ways:
       </p>
 
@@ -146,23 +148,27 @@
         <span class="marginnote">
           <a href="http://www.kdd.org/kdd2016/subtopic/view/smart-broadcasting-do-you-want-to-be-seen">
             Karimi et. al.
-          </a>
-          assume that the broadcasting frequency of
+          </a> assume that the broadcasting frequency of
           <span class="other">other broadcasters</span> is piecewise constant.
         </span>
 
         Thanks to our novel formulation of the problem, our solution
         <span class="red-queen">RedQueen</span> is able to handle all of these
-        cases, <em>without needing to infer the parameters of any process.</em>
+        cases, <em>without needing to perform any model inference using historical data for \( \color{other} M(t) \)</em>.
       </p>
 
-      <h2>Objective</h2>
+      <h2>Methodology</h2>
 
       <p>
-        Now that we have formulated the problem in a form amenable to a
-        <a href="https://en.wikipedia.org/wiki/Hamilton%E2%80%93Jacobi%E2%80%93Bellman_equation#Extension_to_stochastic_problems">stochastic control problem</a>,
-        we have to decide on a loss function to optimize for.
+        Given the dynamics of the rank and of <span class="others">other broadcasters</span>,
+        as stochastic jump differential equations, we can attempt to find the optimal rate
+        of posting for <span class="us">the broadcaster</span> \( u(t) \) by formulating it
+        as a variable in an <a href="https://en.wikipedia.org/wiki/Hamilton%E2%80%93Jacobi%E2%80%93Bellman_equation#Extension_to_stochastic_problems">stochastic control problem</a>.
+        However, before that, we have to choose a loss function which we will
+        aim to optimize for.
+      </p>
 
+      <p>
         We choose the following loss function:
 
         <label class="margin-toggle" for="generalize-multiple-followers">⊕</label>
@@ -206,14 +212,13 @@
           Karimi et. al. optimize for <em>Time spent in top-k</em>, wherein, they find the
           rates which maximize the time the broadcaster's posts spend with \( r(t) \lt k \).
           In <a href="https://arxiv.org/abs/1610.05773">our paper</a>, we show
-          that our approach, though optimizing for a different loss,
+          that our approach, though optimizing for a different loss function,
           still outperforms the offline method.
         </span>
 
-        This function penalizes high ranks quadratically
-        \( \frac{1}{2} s \,r^2(t) \)
-        while also containing the term \( \frac{1}{2} q\,u^2(t) \), which
-        trades off posting with a high frequency and maintaining a low rank.
+        This function penalizes high ranks \( \frac{1}{2} s \,r^2(t) \)
+        as well as posting with high frequency \( \frac{1}{2} q\,u^2(t) \), with
+        tunable weights \( s \) and \( q \) to trade off between them.
       </p>
 
       <p>
@@ -223,6 +228,7 @@
         which minimizes the expectation of the integral.
       </p>
 
+      <!--
       <p>
         The \( s \) and the \( q \) denote the relative penalty of
         the rank we obtain and the amount of broadcasting we do.
@@ -236,12 +242,15 @@
           For details, see <a href="https://arxiv.org/abs/1610.05773">our paper</a>.
         </span>
 
-        <!-- The resulting loss function to optimize in a convex loss function. -->
+      </p>
+      -->
+
+      <p>
+        With this choice of the loss function, the optimization problem can be solved analytically by formulating the optimal cost-to-go, deriving a PDE using the <a href="https://en.wikipedia.org/w/index.php?title=Hamilton%E2%80%93Jacobi%E2%80%93Bellman_equation&wteswitched=1">Hamilton-Jacobi-Bellman equation</a> and then solving it.
       </p>
 
       <p>
-        With this choice of the loss function, the optimization problem can be solved analytically.
-        We arrive at the elegant solution:
+        Finally, on solving the PDE, we arrive at the following elegant solution:
 
         $$
         \overbrace{u(t)}^{\text{broadcast intensity}} = \sqrt{s/q}\,\underbrace{r(t)}_{\text{Rank in feed}}
@@ -263,7 +272,7 @@
         for determining when-to-post.
       </p>
 
-      <h2 id="sampling">The Sampling</h2>
+      <h2 id="sampling">From <em>rate-of-posting</em> to <em>when-to-post</em></h2>
 
       <p>
         <!--
@@ -274,12 +283,14 @@
         -->
 
         Now that we know what how <span class="us">the broadcaster</span> should
-        regulate his messages, we have to determine when exactly should he post.
+        regulate his messages, we have to determine when exactly should post be made.
       </p>
 
+      <p>First, notice that \( u(t) \) changes only when \( r(t) \) changes and in steps of size \( \sqrt{{s}/{q}} \).</p>
+
       <p>
-        However, thanks to the superposition property of Poisson point processes
-        we can treat each <em>jump</em> as the start of a new Poisson process.
+        Thanks to the superposition property of Poisson point processes
+        we can treat each <em>jump</em> in \( u(t) \) as the start of a new Poisson process.
       </p>
 
       <figure>
@@ -293,7 +304,7 @@
         </span>
         <img src="img/superposition.svg"
              alt="u(t) is superposition of multiple point processes"
-             class="full-width">
+             class="centered width-75">
       </figure>
 
       <p>
@@ -312,7 +323,7 @@
         </span>
         <img src="img/sampling.svg"
               alt="sampling u(t) involves taking the minimum of all samples for individual processes"
-              class="full-width">
+              class="centered width-75">
       </figure>
 
       <p>
@@ -323,14 +334,7 @@
 
       <h2>Demo</h2>
 
-      <p class="pure-button-group centered sans" role="group" aria-label="interactive buttons">
-        <button class="small pure-button button-play js-play">
-          <i class="fa fa-play"></i> Play
-        </button>
-        <button class="small pure-button button-stop js-stop">
-          <i class="fa fa-stop"></i> Stop
-        </button>
-      </p>
+      <p>Choose the metric you would like to see and press the <code>Play</code> button to start the demo.</p>
 
       <p class="metric-control">
         <span class="js-option option">
@@ -341,6 +345,17 @@
           <input id="time_at_top" type="radio" name="performance_metric" value="time_at_top" class="js-perf-metric">
           <label for="time_at_top">Time at top \( \int_{0}^{t} {I}(r(\tau) \lt 1)\, d\tau \)</label>
         </span>
+      </p>
+
+
+
+      <p class="pure-button-group centered sans" role="group" aria-label="interactive buttons">
+        <button class="small pure-button button-play js-play">
+          <i class="fa fa-play"></i> Play
+        </button>
+        <button class="small pure-button button-stop js-stop">
+          <i class="fa fa-stop"></i> Stop
+        </button>
       </p>
 
       <figure>
@@ -371,20 +386,18 @@
         </div>
       </figure>
 
-      <h2>Results</h2>
+      <h2>More details</h2>
 
       <p>
-        We compared <span class="red-queen">RedQueen</span> against an Oracle
-        and the state of the art and saw that our algorithm fared favourably.
+        <a href="https://arxiv.org/abs/1610.05773">Our paper</a> contains a mathematical description of <span class="red-queen">RedQueen</span>,
+        and several extensions including, but not limited to:
 
-        Tests were also conducted using real tweets from Twitter and over 2000 users.
-        <span class="red-queen">RedQueen</span> was able to obtain better
-        average rank as well as higher time in the top-1 compared to the real
-        users as well as against the current state of the art.
-
-        For details, see <a href="https://arxiv.org/abs/1610.05773">our paper</a>.
-
-      </p>
+        <ul>
+          <li>We compared <span class="red-queen">RedQueen</span> against an Oracle and the state of the art and saw that our algorithm fared favourably.</li>
+          <li>We extended <span class="red-queen">RedQueen</span> to handle multiple users and to handle time varying weights for followers.</li>
+          <li>We tests <span class="red-queen">RedQueen</span> under <em>truthful what-if</em> conditions by playing back tweets on falls of followers of over 2000 Twitter users. <span class="red-queen">RedQueen</span> was able to obtain better average rank as well as higher time in the top-1 compared to the real users as well as against the current state of the art. </li>
+      </ul>
+    </p>
 
 
       <h2>The Name <em class="red-queen">RedQueen</em></h2>
@@ -404,12 +417,14 @@
       </p>
     </section>
 
-    <section>
-      <h2>Acknowledgements</h2>
+    <hr>
+
+    <section class="small-font">
+      <h3>Acknowledgements</h3>
       <p>
         The <em class="red-queen">RedQueen</em> icon was made by <a href="http://www.flaticon.com/authors/zlatko-najdenovski" title="Zlatko Najdenovski">Zlatko Najdenovski</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a>.
 
-        Other icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> are licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
+        <!-- Other icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> are licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div> -->
       </p>
     </section>
   </article>

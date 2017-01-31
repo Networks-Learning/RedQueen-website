@@ -54,14 +54,6 @@ svg {
   font-size: 0.25em;
 }
 
-.width-50 {
-  width: 50%;
-}
-
-.width-33 {
-  width: 33%;
-}
-
 #demo-header {
   display: flex;
   align-itemj: center;

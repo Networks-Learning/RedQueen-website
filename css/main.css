@@ -44,6 +44,7 @@
 }
 
 svg {
+    max-width: 100%;
 }
 
 .area-chart {
@@ -126,3 +127,26 @@ svg {
 .metric-control .disabled {
     opacity: 0.5;
 }
+
+.small-font {
+    font-size: 75%;
+}
+
+.width-50 {
+  width: 50%;
+}
+
+.width-33 {
+  width: 33%;
+}
+
+img.centered {
+    display: block;
+    margin: auto;
+}
+
+.width-75 {
+  width: 75%;
+}
+
+
