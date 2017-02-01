@@ -264,6 +264,16 @@ var perf_vis = function () {
                 .classed('count-chart', true);
 
             init_chart
+                .append('rect')
+                .classed('hide-future', true)
+                .attr('x', 0)
+                .attr('y', 0)
+                .attr('height', height)
+                .attr('width', width)
+                .attr('fill', 'black')
+                .attr('opacity', 0.25);
+
+            init_chart
               .append('g')
                 .classed('x', true)
                 .classed('axis', true)
@@ -349,18 +359,27 @@ var perf_vis = function () {
                 .select('.y2.axis')
                 .call(y2Axis);
 
-            var chart = d3.select(this)
-                          .select('path.area-chart')
-                          .datum(performance_numbers)
-                          .attr('d', area)
-                          .attr('fill', color);
+            var last_event_time = count_data.length > 0 ?
+                                     count_data[count_data.length - 1].time :
+                                     0;
 
-            var counting = d3.select(this)
-                            .select('path.count-chart')
-                            .datum(count_data)
-                            .attr('d', line)
-                            .attr('stroke', tweet_colors.user)
-                            .attr('fill', 'none');
+            d3.select(this)
+                .select('.hide-future')
+                .attr('x', xScale(last_event_time))
+                .attr('width', width - xScale(last_event_time));
+
+            d3.select(this)
+                .select('path.area-chart')
+                .datum(performance_numbers)
+                .attr('d', area)
+                .attr('fill', color);
+
+            d3.select(this)
+                .select('path.count-chart')
+                .datum(count_data)
+                .attr('d', line)
+                .attr('stroke', tweet_colors.user)
+                .attr('fill', 'none');
         });
     }
 
