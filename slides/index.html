@@ -62,7 +62,14 @@
 
         <div class="left-20">
           <img src="../img/red_queen.512.png" alt="RedQueen" aria="hidden"
-            id="slide-header-img" />
+          id="slide-header-img" />
+
+          <div class="logos">
+            <img src="../img/MPI-SWS-Logo-only.png" alt="Max Plank Institute for Software Systems" class="logo-left"
+              aria="hidden" />
+            <img src="../img/logo-sharif-en.png" alt="Sharif Institute of Technology" class="logo-right"
+              aria="hidden" />
+          </div>
         </div>
 
         <div class="right-20">
@@ -98,14 +105,19 @@
       </section>
 
       <section>
-        <h3>Follower's attention is scarce</h3>
-        <div class="stretch">
+        <h3>A Model for broadcasting</h3>
+        <div class="stretch v-spread">
           <img src="../img/when-to-post-problem-demo.svg" class="full-width">
+          <ul>
+            <li>\( \color{us} N(t) \) is a count of our posts</li>
+            <li>\( \color{other} M(t) \) is a count of posts of others</li>
+            <li>\( r(t) \) is the position of our <em>top-most</em> post</li>
+          </ul>
         </div>
       </section>
 
       <section>
-        <h3>Rank is a proxy for visibility/interaction</h3>
+        <h3>Rank is a measure of visibility</h3>
         <div class="stretch">
           <img src="../img/when-to-post-problem-visibility.svg" class="full-width">
         </div>
@@ -129,9 +141,14 @@
 
       <section>
         <h3>Behavior of <span class="other">other broadcasters</span> can be complex</h3>
-        <div class="stretch">
-          <img src="../img/lambda_t.png" alt="">
+        <div class="stretch v-spread">
+          <img src="../img/when-to-post-others.svg" alt="" class="width-50">
+          <p>
+          <span class="other">Other broadcasters</span> can be bursty with time varying
+          \( d\lambda(t) = \left[\lambda_0'(t)+w \lambda_0(t) -w \lambda(t)\right]dt + \alpha \, \color{other} dM(t) \)
+</p>
         </div>
+
         <!-- <p class="fragment">May change at any point?</p>
         <p class="fragment">Online algorithm works best</p>
         <p class="fragment"><span class="red-queen">RedQueen</span> does not need to infer <em>any</em> at all!</p> -->
@@ -139,9 +156,9 @@
 
       <section>
         <h3>Control <em>rate of posting</em> &nbsp;to decide <em>when to post</em></h3>
-        <div class="stretch">
-          <img src="../img/u_t.png" alt="">
-        </div>
+        <div class="stretch v-spread">
+          <img src="../img/when-to-post-control.svg" alt="" class="width-50">
+          <p>We can <em>control</em> <span class="us">our</span> rate of posting \( u(t) \)</p>        </div>
       </section>
 
       <section>
@@ -149,22 +166,46 @@
         <div class="stretch v-spread">
           $$
             \begin{align}
-            \underset{u(t_0, t_f]}{\text{minimize}} &
-                \quad \mathbb{E}_{(N, M)(t_0, t_f]}\left[
-                  \int_{t_0}^{t_f} \left( \frac{1}{2} s \,r^2(\tau) + \frac{1}{2} q\,u^2(\tau) \right) d\tau
+            \underset{u(0, T]}{\text{minimize}} &
+            \quad \mathbb{E}_{({\color{us}N}, {\color{other}M})(0, T]}\left[
+                  \int_{0}^{T} \left( \frac{1}{2} s \,r^2(\tau) + \frac{1}{2} q\,u^2(\tau) \right) d\tau
                 \right] \\
-            \text{subject to} & \quad u(t) \geq 0 \quad \forall t \in (t_0, t_f]
+            \text{subject to} & \quad u(t) \geq 0 \quad \forall t \in (0, T]
             \end{align}
           $$
 
           <ul>
-            <li>Trades off low rank and high posting rate</li>
+            <li>Expectation over all possible futures</li>
+            <li>Penalizes both high rank and high posting rate</li>
+            <li>\( s \) and \( q \) are tunable parameters</li>
             <li>Leads to an analytical solution</li>
             <li class="fragment">Generalizes to
               <ul>
                 <li>multiple followers: &nbsp; \( r(t) \rightarrow \vec{r}(t) \)</li>
                 <li>time varying weights: &nbsp; \( s \rightarrow \vec{s}(t) \)</li>
               </ul>
+          </ul>
+        </div>
+      </section>
+
+      <section>
+        <h3>Methodology</h3>
+        <div class="stretch v-spread">
+          $$
+            \begin{align}
+            \underset{u(0, T]}{\text{minimize}} &
+            \quad \mathbb{E}_{({\color{us}N}, {\color{other}M})(0, T]}\left[
+                  \int_{0}^{T} \left( \frac{1}{2} s \,r^2(\tau) + \frac{1}{2} q\,u^2(\tau) \right) d\tau
+                \right] \\
+            \text{subject to} & \quad u(t) \geq 0 \quad \forall t \in (0, T]
+            \end{align}
+          $$
+
+          <ul>
+            <li>Compute cost-to-go</li>
+            <li>Use HJB equation to arrive at a PDE</li>
+            <li>Propose a solution to the PDE</li>
+            <li class="fragment">Please see the paper for details</li>
           </ul>
         </div>
       </section>
@@ -177,16 +218,17 @@
             \overbrace{u(t)}^{\text{broadcast intensity}} = \sqrt{s/q}\,\underbrace{r(t)}_{\text{Rank in feed}}
             $$
             <ul>
-              <li>Simple</li>
               <li>Efficient</li>
               <li>Optimal</li>
+              <li>Simple</li>
             </ul>
           </div>
         </section>
 
         <section>
           <h3>\( u(t) \) to <em>when-to-post</em></h3>
-          <h4>\( u(t) \) is a sum of Poisson intensities</h4>
+          <h4>\( u(t) \) changes only when \( r(t) \) changes</h4>
+          <h5>\( u(t) \) is a sum of Poisson intensities</h4>
           <div class="stretch">
             <img src="../img/superposition.svg" alt="" class="full-width">
           </div>
@@ -249,6 +291,7 @@
       </section>
 
       <section>
+        <!--
         <section>
           <h3>Results: Oracle + 1 follower</h3>
           <h4>Oracle, 1 follower</h4>
@@ -256,20 +299,22 @@
             <img src="../img/results-oracle.png" alt="" class="full-width">
           </div>
         </section>
+        -->
 
+        <!--
         <section>
           <h3>Results</h3>
           <h4>Multiple followers</h4>
-          <p>Oracle has \( \mathcal{O}(M(t_f)^2) \) complexity, was unscalable.</p>
           <div class="stretch">
             <img src="../img/results-multiple.png" alt="" class="full-width">
           </div>
         </section>
+        -->
 
         <section>
-          <h3>Results: Real users</h3>
+          <h3>Results</h3>
           <h4>Position over time</h4>
-          <p>2000 Twitter users with walls of their followers, millions of tweets</p>
+          <p>2000 Twitter users with walls of their followers, millions of tweets, <em>truthful what-if</em> conditions by replaying tweets.</p>
           <div class="stretch v-spread">
             <img src="../img/results-real-users-average-rank.png" alt="" class="width-50">
             <p>\( 72\% \) average drop in rank, ranks lowered for <b>all</b> users</p>
@@ -288,17 +333,25 @@
 
       <section>
         <h3>Conclusion</h3>
-        \( u(t) = \sqrt{\frac{s}{q}} r(t) \)
+        \( u(t) = \sqrt{{s}/{q}}\, r(t) \)
         <p>This work has provided:</p>
         <ul>
-          <li>a solution to the <em>when-to-post</em> problem</li>
-          <li>using stochastic optimal control, which is,</li>
-          <li>surprisingly simple, and,</li>
-          <li>easy to implement in real-time, backed by,</li>
+          <li>a solution to the <em>when-to-post</em> problem, which is,</li>
+          <li>surprisingly simple and online, backed by,</li>
           <li>experiments on real data.</li>
         </ul>
+
+        <div class="fragment full-width">
+          <p class=>Questions?</p>
+          <div class="footer">
+            <p>Utkarsh Upadhyay</p>
+            <p><a href="mailto:utkarshu@mpi-sws.org">utkarshu@mpi-sws.org</a></p>
+            <p><a href="http://learning.mpi-sws.org/redqueen/"><code>http://learning.mpi-sws.org/redqueen</code></a></p>
+          </div>
+        </div>
       </section>
 
+      <!--
       <section>
         <h3>Future work</h3>
         <ul>
@@ -312,9 +365,11 @@
           <div class="footer">
             <p>Utkarsh Upadhyay</p>
             <p><a href="mailto:utkarshu@mpi-sws.org">utkarshu@mpi-sws.org</a></p>
+            <p><a href="http://learning.mpi-sws.org/redqueen/"><span class="red-queen">RedQueen</span> webpage with demo</a></p>
           </div>
         </div>
       </section>
+      -->
 
     </div>
   </div>

@@ -78,7 +78,31 @@ svg {
 
 
 .reveal > .slides > section .footer {
-  font-size: 75%;
   line-height: 1;
   text-align: right;
 }
+
+.reveal > .slides > section .footer p {
+  font-size: 50%;
+  line-height: 1;
+  text-align: right;
+}
+
+
+.reveal > .slides > section img.logo-left {
+  width: 40%;
+  float: left;
+  padding-left: 5%;
+  padding-top: 0.25em; /* Hack to align logos */
+}
+
+.reveal > .slides > section img.logo-right {
+  width: 40%;
+  float: right;
+  padding-right: 5%;
+}
+
+.reveal > .slides > section .logos {
+  display: table;
+k
+
