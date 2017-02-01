@@ -214,6 +214,19 @@
         <section>
           <h3>Optimal rate of posting</h3>
           <div class="class stretch v-spread">
+
+            <div class="shrink-eqn">
+            $$
+              \begin{align}
+              \underset{u(0, T]}{\text{minimize}} &
+              \quad \mathbb{E}_{({\color{us}N}, {\color{other}M})(0, T]}\left[
+                    \int_{0}^{T} \left( \frac{1}{2} s \,r^2(\tau) + \frac{1}{2} q\,u^2(\tau) \right) d\tau
+                  \right] \\
+              \text{subject to} & \quad u(t) \geq 0 \quad \forall t \in (0, T]
+              \end{align}
+            $$
+            </div>
+
             $$
             \overbrace{u(t)}^{\text{broadcast intensity}} = \sqrt{s/q}\,\underbrace{r(t)}_{\text{Rank in feed}}
             $$
@@ -228,7 +241,7 @@
         <section>
           <h3>\( u(t) \) to <em>when-to-post</em></h3>
           <h4>\( u(t) \) changes only when \( r(t) \) changes</h4>
-          <h5>\( u(t) \) is a sum of Poisson intensities</h4>
+          <h5>\( \implies u(t) \) is a sum of Poisson intensities</h4>
           <div class="stretch">
             <img src="../img/superposition.svg" alt="" class="full-width">
           </div>
@@ -313,20 +326,26 @@
 
         <section>
           <h3>Results</h3>
-          <h4>Position over time</h4>
-          <p>2000 Twitter users with walls of their followers, millions of tweets, <em>truthful what-if</em> conditions by replaying tweets.</p>
+          <h4>Truthful what-if conditions</h4>
+          <p>
+            We play back tweets on walls of followers and replace the <span class="us">user's posts</span> with <span class="karimi-eval">Karimi et. al.</span>'s or <span class="red-queen red-queen-eval">RedQueen</span>’s.
+          </p>
+
           <div class="stretch v-spread">
-            <img src="../img/results-real-users-average-rank.png" alt="" class="width-50">
-            <p>\( 72\% \) average drop in rank, ranks lowered for <b>all</b> users</p>
-          </div>
+            <img src="../img/results-real-users.png" alt="" class="width-75">
+
+            <ul>
+              <li>\( 72\% \) average drop in rank, lowered for <b>all</b> users</li>
+              <li>\( 3.5\times \) more time at top, increased for \( 99.1\% \) users</li>
+            </ul>
+        </div>
         </section>
 
         <section>
-          <h3>Results: Real users</h3>
-          <h4>Time at the top</h4>
+          <h3>Results</h3>
+          <h4>A random broadcaster</h4>
           <div class="stretch v-spread">
-            <img class="width-50" src="../img/results-real-users-time-in-top-1.png" alt="">
-            <p>\( 3.5\times \) more time at top, increased for \( 99.1\% \) users</p>
+            <img class="full-width" src="../img/results-one-user.png" alt="">
           </div>
         </section>
       </section>
@@ -337,8 +356,8 @@
         <p>This work has provided:</p>
         <ul>
           <li>a solution to the <em>when-to-post</em> problem, which is,</li>
-          <li>surprisingly simple and online, backed by,</li>
-          <li>experiments on real data.</li>
+          <li>surprisingly simple and online, and,</li>
+          <li>beats the current state of the art.</li>
         </ul>
 
         <div class="fragment full-width">

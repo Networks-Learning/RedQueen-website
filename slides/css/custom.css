@@ -102,7 +102,16 @@ svg {
   padding-right: 5%;
 }
 
-.reveal > .slides > section .logos {
-  display: table;
-k
+.karimi-eval {
+  color: #E488B4;
+}
+
+.red-queen-eval {
+  color: #69BE9B;
+}
+
+.shrink-eqn {
+  max-width: 50%;
+  margin: auto;
+}
 
