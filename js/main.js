@@ -365,6 +365,8 @@ var perf_vis = function () {
 
             d3.select(this)
                 .select('.hide-future')
+              .transition()
+                .ease(d3.easeLinear)
                 .attr('x', xScale(last_event_time))
                 .attr('width', width - xScale(last_event_time));
 
