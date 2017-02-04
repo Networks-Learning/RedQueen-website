@@ -78,9 +78,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.5"
-     inkscape:cx="1023.4618"
-     inkscape:cy="981.86956"
+     inkscape:zoom="1"
+     inkscape:cx="1209.1779"
+     inkscape:cy="1045.3256"
      inkscape:document-units="px"
      inkscape:current-layer="g7220"
      showgrid="false"
@@ -94,7 +94,7 @@
      inkscape:window-height="1395"
      inkscape:window-x="4"
      inkscape:window-y="1"
-     inkscape:window-maximized="1" />
+     inkscape:window-maximized="0" />
   <metadata
      id="metadata7364">
     <rdf:RDF>
@@ -176,6 +176,11 @@
          style="fill:#44b3c2;fill-opacity:1;fill-rule:nonzero;stroke:#44b3c2;stroke-opacity:1"
          d="m 2283.0337,254.95377 -112.3378,0 0,-69.06218 224.6681,0 0,69.06218" />
       <path
+         d="m 2283.241,183.60359 -108.9153,0 0,-62.71787 217.8233,0 0,62.71787"
+         style="fill:#44b3c2;fill-opacity:1;fill-rule:nonzero;stroke:#44b3c2;stroke-width:0.93833309;stroke-opacity:1"
+         id="path14955"
+         inkscape:connector-curvature="0" />
+      <path
          inkscape:connector-curvature="0"
          id="path3436"
          style="fill:none;stroke:#000000;stroke-width:5.92166424;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
@@ -200,6 +205,11 @@
          id="path3714"
          style="fill:#f1a94e;fill-opacity:1;stroke:#000000;stroke-width:5.92166424;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
          d="m 2283.0337,324.26545 -112.3378,0 0,-69.06217 224.6681,0 0,69.06217 -112.3303,0 z" />
+      <path
+         inkscape:connector-curvature="0"
+         id="path14957"
+         style="fill:#44b3c2;fill-opacity:1;fill-rule:nonzero;stroke:#44b3c2;stroke-width:0.93833309;stroke-opacity:1"
+         d="m 2283.241,320.87478 -108.9153,0 0,-62.71787 217.8233,0 0,62.71787" />
       <path
          inkscape:connector-curvature="0"
          id="path3716"
