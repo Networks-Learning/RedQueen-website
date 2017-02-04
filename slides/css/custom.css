@@ -119,3 +119,11 @@ svg {
 #slides-demo .legend {
   font-size: 200%;
 }
+
+.reveal > .slides .planned-posting-time {
+  color: #d33682;
+}
+
+.reveal > .slides .current-time {
+  color: #5AC150;
+}

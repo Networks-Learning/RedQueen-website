@@ -98,12 +98,13 @@
       </section>
 
       <section>
-        <h3><em>When-to-post</em> &nbsp; is a hot topic</h3>
+        <h3><em>When-to-post</em></h3>
         <div class="stretch">
           <img class="full-width" src="../img/best-time-to-post.png">
         </div>
       </section>
 
+      <!--
       <section>
         <h3>A Model for broadcasting</h3>
         <div class="stretch v-spread">
@@ -111,42 +112,45 @@
           <ul>
             <li>\( \color{us} N(t) \) is a count of our posts</li>
             <li>\( \color{other} M(t) \) is a count of posts of others</li>
-            <li>\( r(t) \) is the position of our <em>top-most</em> post</li>
           </ul>
         </div>
       </section>
+      -->
 
       <section>
-        <h3>Rank is a measure of visibility</h3>
-        <div class="stretch">
+        <h3>Problem setup</h3>
+        <div class="stretch v-spread">
           <img src="../img/when-to-post-problem-visibility.svg" class="full-width">
+          <p class="fragment">
+            \( r(t) \): position of the <em>highest ranked</em> post by <span class="us">our broadcaster</span> on the follower's feed.
+          </p>
         </div>
       </section>
 
-      <section>
+      <section data-transition="fade-out">
         <h3>Dynamics of inverse-chronological rank</h3>
         <div class="stretch v-spread">
           <img class="width-50" src="../img/when-to-post-problem-dynamics.svg" alt="">
           $$
           r(t+dt) = \left\{
-            \begin{array}{ccccl}
-            & (r(t)+1) & {\color{other} dM(t)} & {\color{us} (1-dN(t))} & {\color{other} \text{Others post}}\\
-            + & 0 & {\color{other}(1 - dM(t))} & {\color{us} dN(t)} & {\color{us} \text{Our broadcaster posts}}\\
-            + & r(t) & {\color{other} (1 - dM(t))} & {\color{us} (1- dN(t))} & \text{No-one posts}
+            \begin{array}{cl}
+            & r(t)+1 & {\color{other} \text{Others post}}\\
+            & 0  & {\color{us} \text{Our broadcaster posts}}\\
+            & r(t) & \text{No-one posts}
             \end{array}
             \right.
           $$
         </div>
       </section>
 
-      <section>
-        <h3>Behavior of <span class="other">other broadcasters</span> can be complex</h3>
+      <section data-transition="fade-in fade-out">
+        <h3>Posting dynamics using temporal point processes</h3>
         <div class="stretch v-spread">
           <img src="../img/when-to-post-others.svg" alt="" class="width-50">
           <p>
-          <span class="other">Other broadcasters</span> can be bursty with time varying
-          \( d\lambda(t) = \left[\lambda_0'(t)+w \lambda_0(t) -w \lambda(t)\right]dt + \alpha \, \color{other} dM(t) \)
-</p>
+            <span class="other">Other broadcasters</span> can be bursty with time varying rates, which we cannot control.
+            <!-- \( d\lambda(t) = \left[\lambda_0'(t)+w \lambda_0(t) -w \lambda(t)\right]dt + \alpha \, \color{other} dM(t) \) -->
+          </p>
         </div>
 
         <!-- <p class="fragment">May change at any point?</p>
@@ -154,13 +158,15 @@
         <p class="fragment"><span class="red-queen">RedQueen</span> does not need to infer <em>any</em> at all!</p> -->
       </section>
 
-      <section>
-        <h3>Control <em>rate of posting</em> &nbsp;to decide <em>when to post</em></h3>
+      <section data-transition="fade-in fade-out">
+        <h3>Posting dynamics using temporal point processes</h3>
         <div class="stretch v-spread">
           <img src="../img/when-to-post-control.svg" alt="" class="width-50">
-          <p>We can <em>control</em> <span class="us">our</span> rate of posting \( u(t) \)</p>        </div>
+          <p>We would like to <em>control</em> <span class="us">our</span> rate of posting \( u(t) \) to minimize \( r(t) \).</p>
+        </div>
       </section>
 
+      <!--
       <section>
         <h3>Loss function</h3>
         <div class="stretch v-spread">
@@ -187,7 +193,9 @@
           </ul>
         </div>
       </section>
+      -->
 
+      <!--
       <section>
         <h3>Methodology</h3>
         <div class="stretch v-spread">
@@ -209,52 +217,91 @@
           </ul>
         </div>
       </section>
+      -->
+
+      <section data-transition="fade-in">
+        <h3>Optimal rate of posting</h3>
+        <div class="class stretch v-spread">
+
+          <!--
+          <div class="shrink-eqn">
+          $$
+            \begin{align}
+            \underset{u(0, T]}{\text{minimize}} &
+            \quad \mathbb{E}_{({\color{us}N}, {\color{other}M})(0, T]}\left[
+                  \int_{0}^{T} \left( \frac{1}{2} s \,r^2(\tau) + \frac{1}{2} q\,u^2(\tau) \right) d\tau
+                \right] \\
+            \text{subject to} & \quad u(t) \geq 0 \quad \forall t \in (0, T]
+            \end{align}
+          $$
+          </div>
+
+          $$
+          \overbrace{u(t)}^{\text{broadcast intensity}} = \sqrt{s/q}\,\underbrace{r(t)}_{\text{Rank in feed}}
+          $$
+          <ul>
+            <li>Efficient</li>
+            <li>Optimal</li>
+            <li>Simple</li>
+          </ul>
+        -->
+
+        <img class="full-width" src="../img/when-to-post-solution.svg" alt="">
+        <p>For a very general class of behavior of <span class="other">other broadcasters</span>, the optimal <em>rate of posting</em> is \( u^{*}(t) = c \times r(t) \).</p>
+        </div>
+      </section>
+
+      <section data-transition="fade-out">
+        <h3>\( u(t) \) to <em>when-to-post</em></h3>
+        <div class="stretch v-spread">
+          <img class="width-50" src="../img/sampling-1.svg" alt="">
+          <p>When \( r(t) = 0 \), <span class="us">we</span> do not need to post at all.</p>
+        </div>
+      </section>
+
+      <section data-transition="fade-in fade-out">
+        <h3>\( u(t) \) to <em>when-to-post</em></h3>
+        <div class="stretch v-spread">
+          <img class="width-50" src="../img/sampling-2.svg" alt="">
+          <p>\( u(t) = c \times r(t) \) and we take one sample from exponential to determine our <span class="planned-posting-time">next post's time</span>.</p>
+        </div>
+      </section>
+
+      <section data-transition="fade-in fade-out">
+        <h3>\( u(t) \) to <em>when-to-post</em></h3>
+        <div class="stretch v-spread">
+          <img class="width-50" src="../img/sampling-3.svg" alt="">
+          <p>If <span class="other">other broadcasters</span> post in the <span class="current-time">meanwhile</span>, we may revise our <span class="planned-posting-time">planned posting time</span>.</p>
+        </div>
+      </section>
+
+      <section data-transition="fade-in">
+        <h3>\( u(t) \) to <em>when-to-post</em></h3>
+        <div class="stretch v-spread">
+          <img class="width-50" src="../img/sampling-4.svg" alt="">
+          <p>However, we may not update our time if we <span class="planned-posting-time">planned to post</span> was earlier than the new sampled time.</p>
+        </div>
+      </section>
+
+
+      <!--
+      <section>
+        <h3>\( u(t) \) to <em>when-to-post</em></h3>
+        <h4>\( u(t) \) changes only when \( r(t) \) changes</h4>
+        <h5>\( \implies u(t) \) is a sum of Poisson intensities</h4>
+        <div class="stretch">
+          <img src="../img/superposition.svg" alt="" class="full-width">
+        </div>
+      </section>
 
       <section>
-        <section>
-          <h3>Optimal rate of posting</h3>
-          <div class="class stretch v-spread">
-
-            <div class="shrink-eqn">
-            $$
-              \begin{align}
-              \underset{u(0, T]}{\text{minimize}} &
-              \quad \mathbb{E}_{({\color{us}N}, {\color{other}M})(0, T]}\left[
-                    \int_{0}^{T} \left( \frac{1}{2} s \,r^2(\tau) + \frac{1}{2} q\,u^2(\tau) \right) d\tau
-                  \right] \\
-              \text{subject to} & \quad u(t) \geq 0 \quad \forall t \in (0, T]
-              \end{align}
-            $$
-            </div>
-
-            $$
-            \overbrace{u(t)}^{\text{broadcast intensity}} = \sqrt{s/q}\,\underbrace{r(t)}_{\text{Rank in feed}}
-            $$
-            <ul>
-              <li>Efficient</li>
-              <li>Optimal</li>
-              <li>Simple</li>
-            </ul>
-          </div>
-        </section>
-
-        <section>
-          <h3>\( u(t) \) to <em>when-to-post</em></h3>
-          <h4>\( u(t) \) changes only when \( r(t) \) changes</h4>
-          <h5>\( \implies u(t) \) is a sum of Poisson intensities</h4>
-          <div class="stretch">
-            <img src="../img/superposition.svg" alt="" class="full-width">
-          </div>
-        </section>
-
-        <section>
-          <h3>\( u(t) \) to <em>when-to-post</em></h3>
-          <h4>Take one sample per component and compute the minimum</h4>
-          <div class="stretch">
-            <img src="../img/sampling.svg" alt="" class="full-width">
-          </div>
-        </section>
+        <h3>\( u(t) \) to <em>when-to-post</em></h3>
+        <h4>Take one sample per component and compute the minimum</h4>
+        <div class="stretch">
+          <img src="../img/sampling.svg" alt="" class="full-width">
+        </div>
       </section>
+      -->
 
       <!--
       <section>
@@ -322,7 +369,7 @@
         <div id="slides-demo" class="stretch">
           <div class="width-50">
             <p class="legend">
-              Time at top \( \int_{0}^{t} {I}(r(\tau) \lt 1)\, d\tau \)
+              Time at top \( \int_{0}^{t} \mathbb{I}(r(\tau) \lt 1)\, d\tau \)
             </p>
 
             <div class="long vis-aspect">
