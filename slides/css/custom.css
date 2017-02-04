@@ -52,6 +52,7 @@ svg {
 
 #slides-demo {
   font-size: 0.25em;
+  width: 100%;
 }
 
 #demo-header {
@@ -115,3 +116,6 @@ svg {
   margin: auto;
 }
 
+#slides-demo .legend {
+  font-size: 200%;
+}

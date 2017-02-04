@@ -9,6 +9,12 @@ var tweet_colors = {
     'other': '#4AB3C1'
 };
 
+
+window.set_performance = function (new_perf_metric) {
+    perf_metric = new_perf_metric;
+}
+
+
 function mb(x, def) {
     return (typeof x === 'undefined') ? def : x;
 }
@@ -34,6 +40,14 @@ function update_till_time(dst_arr, src_arr, idx, end_time) {
         });
 
         idx += 1;
+    }
+
+    // Extend the performance to the last time, no lag!
+    if (dst_arr.length > 0) {
+        dst_arr.push({
+            time: end_time,
+            value: dst_arr[dst_arr.length - 1].value
+        });
     }
 
     return idx;
@@ -379,6 +393,8 @@ var perf_vis = function () {
             d3.select(this)
                 .select('path.count-chart')
                 .datum(count_data)
+              .transition()
+                .ease(d3.easeLinear)
                 .attr('d', line)
                 .attr('stroke', tweet_colors.user)
                 .attr('fill', 'none');
@@ -610,7 +626,7 @@ fetch(window.DATA_SOURCE ? window.DATA_SOURCE : 'data/example2.json')
             // This timer_id can be used to stop updates mid-way or to pause
             // or resume.
             // debugger;
-            timer_id = setTimeout(
+            timer_id = d3.timeout(
                 function () { update_all_vis(vis_state); },
                 (next_tick - old_time) / scaled_end_time * max_real_time
             );
@@ -635,8 +651,7 @@ fetch(window.DATA_SOURCE ? window.DATA_SOURCE : 'data/example2.json')
 
     /* Draw the axis with the first point. */
     update_all_vis(vis_state);
-    clearTimeout(timer_id);
-    timer_id = null;
+    timer_id.stop();
 
     d3.select('.js-play')
         .on('click', function () {
@@ -654,8 +669,7 @@ fetch(window.DATA_SOURCE ? window.DATA_SOURCE : 'data/example2.json')
     d3.select('.js-stop')
         .on('click', function () {
             if (timer_id !== null) {
-                clearTimeout(timer_id);
-                timer_id = null;
+                timer_id.stop();
             }
         });
 

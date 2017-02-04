@@ -256,6 +256,43 @@
         </section>
       </section>
 
+      <!--
+      <section>
+        <h3>Results: Oracle + 1 follower</h3>
+        <h4>Oracle, 1 follower</h4>
+        <div class="stretch">
+          <img src="../img/results-oracle.png" alt="" class="full-width">
+        </div>
+      </section>
+      -->
+
+      <!--
+      <section>
+        <h3>Results</h3>
+        <h4>Multiple followers</h4>
+        <div class="stretch">
+          <img src="../img/results-multiple.png" alt="" class="full-width">
+        </div>
+      </section>
+      -->
+
+      <section>
+        <h3>Results</h3>
+        <h4>Truthful what-if conditions</h4>
+        <p>
+          We play back tweets on walls of followers and replace the <span class="us">user's posts</span> with <span class="karimi-eval">Karimi et. al.</span>'s or <span class="red-queen red-queen-eval">RedQueen</span>’s.
+        </p>
+
+        <div class="stretch v-spread">
+          <img src="../img/results-real-users.png" alt="" class="width-75">
+
+          <ul>
+            <li>\( 72\% \) average drop in rank, lowered for <b>all</b> users</li>
+            <li>\( 3.5\times \) more time at top, increased for \( 99.1\% \) users</li>
+          </ul>
+      </div>
+      </section>
+
       <section>
         <h3 id="demo-header">
           Demo
@@ -269,6 +306,7 @@
           </span>
         </h3>
 
+        <!--
         <p class="metric-control">
           <span class="js-option option">
             <input id="avg_rank" type="radio" name="performance_metric" value="avg_rank" checked class="js-perf-metric">
@@ -279,10 +317,14 @@
             <label for="time_at_top">Time at top \( \int_{0}^{t} {I}(r(\tau) \lt 1)\, d\tau \)</label>
           </span>
         </p>
-
+        -->
 
         <div id="slides-demo" class="stretch">
           <div class="width-50">
+            <p class="legend">
+              Time at top \( \int_{0}^{t} {I}(r(\tau) \lt 1)\, d\tau \)
+            </p>
+
             <div class="long vis-aspect">
               <svg id="perf-1-vis" width="100%" class="content" viewBox="0 0 300 100"></svg>
             </div>
@@ -301,55 +343,21 @@
             </div>
           </div>
         </div>
-      </section>
 
-      <section>
-        <!--
-        <section>
-          <h3>Results: Oracle + 1 follower</h3>
-          <h4>Oracle, 1 follower</h4>
-          <div class="stretch">
-            <img src="../img/results-oracle.png" alt="" class="full-width">
+        <div class="fragment full-width">
+          <p class=>Questions?</p>
+          <div class="footer">
+            <p>Utkarsh Upadhyay</p>
+            <p><a href="mailto:utkarshu@mpi-sws.org">utkarshu@mpi-sws.org</a></p>
+            <p><a href="http://learning.mpi-sws.org/redqueen/"><code>http://learning.mpi-sws.org/redqueen</code></a></p>
           </div>
-        </section>
-        -->
-
-        <!--
-        <section>
-          <h3>Results</h3>
-          <h4>Multiple followers</h4>
-          <div class="stretch">
-            <img src="../img/results-multiple.png" alt="" class="full-width">
-          </div>
-        </section>
-        -->
-
-        <section>
-          <h3>Results</h3>
-          <h4>Truthful what-if conditions</h4>
-          <p>
-            We play back tweets on walls of followers and replace the <span class="us">user's posts</span> with <span class="karimi-eval">Karimi et. al.</span>'s or <span class="red-queen red-queen-eval">RedQueen</span>’s.
-          </p>
-
-          <div class="stretch v-spread">
-            <img src="../img/results-real-users.png" alt="" class="width-75">
-
-            <ul>
-              <li>\( 72\% \) average drop in rank, lowered for <b>all</b> users</li>
-              <li>\( 3.5\times \) more time at top, increased for \( 99.1\% \) users</li>
-            </ul>
         </div>
-        </section>
 
-        <section>
-          <h3>Results</h3>
-          <h4>A random broadcaster</h4>
-          <div class="stretch v-spread">
-            <img class="full-width" src="../img/results-one-user.png" alt="">
-          </div>
-        </section>
       </section>
 
+
+
+      <!--
       <section>
         <h3>Conclusion</h3>
         \( u(t) = \sqrt{{s}/{q}}\, r(t) \)
@@ -369,6 +377,7 @@
           </div>
         </div>
       </section>
+      -->
 
       <!--
       <section>
@@ -419,5 +428,8 @@
     window.DATA_SOURCE = '../data/example2.json';
   </script>
   <script src="../js/main.js"></script>
+  <script>
+    window.set_performance('time_at_top');
+  </script>
 </body>
 </html>
