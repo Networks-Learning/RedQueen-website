@@ -252,34 +252,42 @@
       </section>
 
       <section data-transition="fade-out">
-        <h3>\( u(t) \) to <em>when-to-post</em></h3>
+        <h3>\( u^{*}(t) \) to <em>when-to-post</em></h3>
         <div class="stretch v-spread">
           <img class="width-50" src="../img/sampling-1.svg" alt="">
-          <p>When \( r(t) = 0 \), <span class="us">we</span> do not need to post at all.</p>
+          <p>Since \( u(t) = 0 \), so <span class="us">we</span> do not need to post at all.</p>
         </div>
       </section>
 
       <section data-transition="fade-in fade-out">
-        <h3>\( u(t) \) to <em>when-to-post</em></h3>
+        <h3>\( u^{*}(t) \) to <em>when-to-post</em></h3>
         <div class="stretch v-spread">
           <img class="width-50" src="../img/sampling-2.svg" alt="">
-          <p>\( u(t) = c \times r(t) \) and we take one sample from exponential to determine our <span class="planned-posting-time">next post's time</span>.</p>
+          <p><span class="us">We</span> take one sample from \( exp(c) \) to determine our <span class="planned-posting-time">next post's time</span>.</p>
         </div>
       </section>
 
       <section data-transition="fade-in fade-out">
-        <h3>\( u(t) \) to <em>when-to-post</em></h3>
+        <h3>\( u^{*}(t) \) to <em>when-to-post</em></h3>
         <div class="stretch v-spread">
           <img class="width-50" src="../img/sampling-3.svg" alt="">
           <p>If <span class="other">other broadcasters</span> post in the <span class="current-time">meanwhile</span>, we may revise our <span class="planned-posting-time">planned posting time</span>.</p>
         </div>
       </section>
 
-      <section data-transition="fade-in">
-        <h3>\( u(t) \) to <em>when-to-post</em></h3>
+      <section data-transition="fade-in fade-out">
+        <h3>\( u^{*}(t) \) to <em>when-to-post</em></h3>
         <div class="stretch v-spread">
           <img class="width-50" src="../img/sampling-4.svg" alt="">
           <p>However, we may not update our time if we <span class="planned-posting-time">planned to post</span> was earlier than the new sampled time.</p>
+        </div>
+      </section>
+
+      <section data-transition="fade-in">
+        <h3>\( u^{*}(t) \) to <em>when-to-post</em></h3>
+        <div class="stretch v-spread">
+          <img class="width-50" src="../img/sampling-1.svg" alt="">
+          <p>After <span class="us">we</span> post, we start this process all over again.</p>
         </div>
       </section>
 
@@ -323,6 +331,7 @@
       </section>
       -->
 
+      <!--
       <section>
         <h3>Results</h3>
         <h4>Truthful what-if conditions</h4>
@@ -338,69 +347,79 @@
             <li>\( 3.5\times \) more time at top, increased for \( 99.1\% \) users</li>
           </ul>
       </div>
-      </section>
+    </section>
+    -->
 
-      <section>
-        <h3 id="demo-header">
-          Demo
-          <span class="demo-buttons pure-button-group centered sans" aria-label="interactive buttons">
-            <button class="small pure-button button-play js-play">
-              <i class="fa fa-play"></i> Play
-            </button>
-            <button class="small pure-button button-stop js-stop">
-              <i class="fa fa-stop"></i> Stop
-            </button>
-          </span>
-        </h3>
+    <section>
+      <h3>Results</h3>
+      <h4>Average rank</h4>
+      <div class="stretch v-spread">
+        <img class="full-width" src="../img/results-real-users-average-rank.png" alt="">
+          <p>\( 72\% \) average drop in rank, lowered for <b>all</b> users</p>
+      </div>
+    </section>
 
-        <!--
-        <p class="metric-control">
-          <span class="js-option option">
-            <input id="avg_rank" type="radio" name="performance_metric" value="avg_rank" checked class="js-perf-metric">
-            <label for="avg_rank">Rank \( r(t) \)</label>
-          </span>
-          <span class="js-option option">
-            <input id="time_at_top" type="radio" name="performance_metric" value="time_at_top" class="js-perf-metric">
-            <label for="time_at_top">Time at top \( \int_{0}^{t} {I}(r(\tau) \lt 1)\, d\tau \)</label>
-          </span>
-        </p>
-        -->
+    <section>
+      <h3 id="demo-header">
+        Demo
+        <span class="demo-buttons pure-button-group centered sans" aria-label="interactive buttons">
+          <button class="small pure-button button-play js-play">
+            <i class="fa fa-play"></i> Play
+          </button>
+          <button class="small pure-button button-stop js-stop">
+            <i class="fa fa-stop"></i> Stop
+          </button>
+        </span>
+      </h3>
 
-        <div id="slides-demo" class="stretch">
-          <div class="width-50">
-            <p class="legend">
-              Time at top \( \int_{0}^{t} \mathbb{I}(r(\tau) \lt 1)\, d\tau \)
-            </p>
+      <!--
+      <p class="metric-control">
+        <span class="js-option option">
+          <input id="avg_rank" type="radio" name="performance_metric" value="avg_rank" checked class="js-perf-metric">
+          <label for="avg_rank">Rank \( r(t) \)</label>
+        </span>
+        <span class="js-option option">
+          <input id="time_at_top" type="radio" name="performance_metric" value="time_at_top" class="js-perf-metric">
+          <label for="time_at_top">Time at top \( \int_{0}^{t} {I}(r(\tau) \lt 1)\, d\tau \)</label>
+        </span>
+      </p>
+      -->
 
-            <div class="long vis-aspect">
-              <svg id="perf-1-vis" width="100%" class="content" viewBox="0 0 300 100"></svg>
-            </div>
+      <div id="slides-demo" class="stretch">
+        <div class="width-50">
+          <p class="legend">
+            Time at top \( \int_{0}^{t} \mathbb{I}(r(\tau) \lt 1)\, d\tau \)
+          </p>
 
-            <div class="long vis-aspect">
-              <svg id="perf-2-vis" width="100%" class="content" viewBox="0 0 300 100"></svg>
-            </div>
+          <div class="long vis-aspect">
+            <svg id="perf-1-vis" width="100%" class="content" viewBox="0 0 300 100"></svg>
           </div>
 
-          <div class="width-50 equal-size">
-            <div class="tall left vis-aspect">
-              <svg class="content" id="feed-1-vis" viewBox="0 0 100 150"></svg>
-            </div>
-            <div class="tall right vis-aspect">
-              <svg id="feed-2-vis" class="content" viewBox="0 0 100 150"></svg>
-            </div>
-          </div>
-        </div>
-
-        <div class="fragment full-width">
-          <p class=>Questions?</p>
-          <div class="footer">
-            <p>Utkarsh Upadhyay</p>
-            <p><a href="mailto:utkarshu@mpi-sws.org">utkarshu@mpi-sws.org</a></p>
-            <p><a href="http://learning.mpi-sws.org/redqueen/"><code>http://learning.mpi-sws.org/redqueen</code></a></p>
+          <div class="long vis-aspect">
+            <svg id="perf-2-vis" width="100%" class="content" viewBox="0 0 300 100"></svg>
           </div>
         </div>
 
-      </section>
+        <div class="width-50 equal-size">
+          <div class="tall left vis-aspect">
+            <svg class="content" id="feed-1-vis" viewBox="0 0 100 150"></svg>
+          </div>
+          <div class="tall right vis-aspect">
+            <svg id="feed-2-vis" class="content" viewBox="0 0 100 150"></svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="fragment full-width">
+        <p class=>Questions?</p>
+        <div class="footer">
+          <p>Utkarsh Upadhyay</p>
+          <p><a href="mailto:utkarshu@mpi-sws.org">utkarshu@mpi-sws.org</a></p>
+          <p><a href="http://learning.mpi-sws.org/redqueen/"><code>http://learning.mpi-sws.org/redqueen</code></a></p>
+        </div>
+      </div>
+
+    </section>
 
 
 
