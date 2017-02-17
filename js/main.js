@@ -9,6 +9,15 @@ var tweet_colors = {
     'other': '#4AB3C1'
 };
 
+function Object_values(obj) {
+    // This is hand rolled out polyfill for Object.values
+    var vals = [];
+    for (var key in obj) {
+        vals.push(obj[key]);
+    }
+    return vals;
+}
+
 
 window.set_performance = function (new_perf_metric) {
     perf_metric = new_perf_metric;
@@ -515,7 +524,7 @@ fetch(window.DATA_SOURCE ? window.DATA_SOURCE : 'data/example2.json')
             perf_2 : mb(perf_2.post_times[vis_state.perf_post_idx[1]], Infinity)
         };
 
-        var next_tick = Math.min.apply(null, Object.values(next));
+        var next_tick = Math.min.apply(null, Object_values(next));
         id += 1;
         var tweet = { id: id };
 
