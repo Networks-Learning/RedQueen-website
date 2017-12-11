@@ -1,0 +1,819 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <!-- MathJax configuration must come before MathJAX is loaded even if async -->
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      TeX: {
+        extensions: [ "color.js" ]
+      }
+    });
+  </script>
+
+  <title>RedQueen</title>
+
+  <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/0.6.2/buttons.css"> -->
+  <link rel="stylesheet" href="../css/vendor/buttons.css">
+
+  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"> -->
+  <link rel="stylesheet" href="../css/vendor/font-awesome.min.css">
+
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/2.0.1/fetch.min.js"></script> -->
+  <script src="../js/vendor/fetch.min.js"></script>
+
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.4.0/d3.min.js"></script> -->
+  <script src="../js/vendor/d3.min.js"></script>
+
+  <link rel="favicon" href="../favicon.ico">
+
+  <link rel="stylesheet" href="css/reveal.css">
+  <link rel="stylesheet" href="css/theme/solarized.css">
+
+  <!-- Theme used for syntax highlighting of code -->
+  <link rel="stylesheet" href="lib/css/zenburn.css">
+
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="css/custom.css">
+
+
+  <!-- Printing and PDF exports -->
+  <script>
+    var link = document.createElement( 'link' );
+    link.rel = 'stylesheet';
+    link.type = 'text/css';
+    link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+    document.getElementsByTagName( 'head' )[0].appendChild( link );
+  </script>
+</head>
+<body>
+  <div style="display: none">
+    $$
+        \definecolor{us}{RGB}{239, 168, 86}
+        \definecolor{other}{RGB}{74, 179, 193}
+    $$
+  </div>
+
+  <div class="reveal">
+    <div class="slides">
+      <section>
+
+        <div class="left-20">
+          <img src="../img/red_queen.512.png" alt="RedQueen" aria="hidden"
+          id="slide-header-img" />
+
+          <div class="logos">
+            <img src="../img/MPI-SWS-Logo-only.png" alt="Max Plank Institute for Software Systems" class="logo-left"
+              aria="hidden" />
+            <img src="../img/logo-sharif-en.png" alt="Sharif Institute of Technology" class="logo-right"
+              aria="hidden" />
+          </div>
+        </div>
+
+        <div class="right-20">
+          <h1 class="red-queen">
+              RedQueen
+          </h1>
+
+          <p class="subtitle">
+            An Online Algorithm for Smart Broadcasting in Social Networks
+          </p>
+
+          <p>by <a href="http://musicallyut.in">Utkarsh Upadhyay</a></p>
+
+          <p class="authors">
+            Joint work with:
+            <a href="https://azarezade.github.io/">Ali Zarezade</a>,
+            <a href="http://sharif.edu/~rabiee/">Hamid R. Rabiee</a>,
+            <a href="https://people.mpi-sws.org/~manuelgr/">Manuel Gomez-Rodriguez</a>
+          </p>
+        </div>
+      </section>
+
+      <section>
+        <h3>Social media is a broadcasting platform</h3>
+        <p>Everybody is a broadcaster</p>
+        <div class="stretch h-spread">
+          <img src="../img/wall-facebook.png" alt="Facebook post" class="width-33">
+          <img src="../img/wall-instagram.png" alt="Instagram post" class="width-33">
+          <img src="../img/wall-twitter.png" alt="Twitter post" class="width-33">
+        </div>
+      </section>
+
+      <section>
+        <section data-transition="fade-out">
+          <h3>Users have multiple followers</h3>
+          <div class="stretch v-spread">
+            <img class="full-width" src="../img/you-are-not-alone-init.svg" alt="">
+          </div>
+        </section>
+
+        <section data-transition="fade-in fade-out">
+          <h3>User attention is scarce</h3>
+          <div class="stretch v-spread">
+            <img class="full-width" src="../img/you-are-not-alone.svg">
+            <p><span class="other">Other broadcasters</span> appear in the same feed.</p>
+          </div>
+        </section>
+
+        <section data-transition="fade-in">
+          <h3>User attention is scarce</h3>
+          <div class="stretch v-spread">
+            <img class="full-width" src="../img/you-are-not-alone.svg">
+            <p>Not all posting times are the same.</p>
+          </div>
+        </section>
+      </section>
+
+      <section>
+        <h3><em>When-to-post</em></h3>
+        <div class="stretch">
+          <img class="full-width" src="../img/best-time-to-post.png">
+        </div>
+      </section>
+
+      <!--
+      <section>
+        <h3>A Model for broadcasting</h3>
+        <div class="stretch v-spread">
+          <img src="../img/when-to-post-problem-demo.svg" class="full-width">
+          <ul>
+            <li>\( \color{us} N(t) \) is a count of our posts</li>
+            <li>\( \color{other} M(t) \) is a count of posts of others</li>
+          </ul>
+        </div>
+      </section>
+      -->
+
+      <section>
+        <section data-transition="fade-out">
+          <h3>Problem setup</h3>
+          <div class="stretch v-spread width-75">
+            <img src="../img/when-to-post-problem-visibility.svg" class="width-75">
+            <p>
+              We will help <span class="us">one broadcaster</span>.<br/>&nbsp;
+            </p>
+          </div>
+        </section>
+
+        <section data-transition="fade-out">
+          <h3>Problem setup</h3>
+          <div class="stretch v-spread width-75">
+            <img src="../img/when-to-post-problem-visibility.svg" class="width-75">
+            <p>
+              In this talk: we will consider only one follower.<br/>&nbsp;
+            </p>
+          </div>
+        </section>
+
+        <section data-transition="fade-in fade-out">
+          <h3>Problem setup</h3>
+          <div class="stretch v-spread width-75">
+            <img src="../img/when-to-post-problem-visibility.svg" class="width-75">
+            <p>
+              \( {\color{other} M(t)} \): How many times <span class="other">others</span> have posted till time \( t \). Not under our control.
+            </p>
+          </div>
+        </section>
+
+        <section data-transition="fade-in fade-out">
+          <h3>Problem setup</h3>
+          <div class="stretch v-spread width-75">
+            <img src="../img/when-to-post-problem-visibility.svg" class="width-75">
+            <p>
+              \( {\color{us} N(t)} \): How many times <span class="us">our broadcaster</span> has posted till time \( t \). Under our control.
+            </p>
+          </div>
+        </section>
+
+        <section data-transition="fade-in">
+          <h3>Problem setup</h3>
+          <div class="stretch v-spread width-75">
+            <img src="../img/when-to-post-problem-visibility.svg" class="width-75">
+            <p>
+              \( r(t) \): position of the <em>highest ranked</em> post by <span class="us">our broadcaster</span> on the follower's feed.
+            </p>
+          </div>
+        </section>
+
+        <section data-transition="fade-in">
+          <h3>Problem setup</h3>
+          <div class="stretch v-spread width-75">
+            <img src="../img/when-to-post-problem-visibility.svg" class="width-75">
+            <p>
+              Minimizing \( r(t) \) is a <em>lower bound</em> on the problem of maximizing user attention.
+            </p>
+          </div>
+        </section>
+      </section>
+
+      <section>
+        <section>
+          <h3>Dynamics of the system</h3>
+
+          <table>
+            <tr>
+              <td class="text-centered no-border">\( r(t) \)</td>
+              <td class="no-border">Rank of <span class="us">our broadcaster</span>.</td>
+            <td class="fragment no-border">
+              \( \leftarrow \)
+
+            </td>
+            </tr>
+            <tr>
+              <td class="text-centered no-border">\( {\color{us} N(t)}, {\color{other} M(t)} \)</td>
+              <td class="no-border">Number of posts.</td>
+            </tr>
+            <td class="no-border"></td>
+          </table>
+        </section>
+      </section>
+
+      <section>
+        <section data-transition="fade-out">
+          <h3>Dynamics of inverse-chronological rank</h3>
+          <div class="stretch v-spread">
+            <img class="width-50" src="../img/when-to-post-problem-dynamics.svg" alt="">
+            $$
+            r(t+dt) = \left\{
+              \begin{array}{cl}
+              & r(t)+1 & {\color{other} \text{Others post}}\\
+              & 0  & {\color{us} \text{Our broadcaster posts}}\\
+              & r(t) & \text{No-one posts}
+              \end{array}
+              \right.
+            $$
+          </div>
+        </section>
+
+        <section data-transition="fade-in">
+          <h3>Dynamics of inverse-chronological rank</h3>
+          <div class="stretch v-spread">
+            <img class="width-50" src="../img/when-to-post-problem-dynamics.svg" alt="">
+            $$
+            dr(t) = {\color{other} dM(t)} - r(t) {\color{us} dN(t)}
+            $$
+          </div>
+        </section>
+      </section>
+
+      <section>
+        <section>
+          <h3>Dynamics of the system</h3>
+
+          <table>
+            <tr>
+              <td class="text-centered no-border">\( r(t) \)</td>
+              <td class="no-border">Rank of <span class="us">our broadcaster</span>.</td>
+              <td class="no-border"></td>
+            </tr>
+            <tr>
+              <td class="text-centered no-border">\( {\color{us} N(t)}, {\color{other} M(t)} \)</td>
+              <td class="no-border">Number of posts.</td>
+              <td class="no-border"> \( \leftarrow \) </td>
+            </tr>
+          </table>
+        </section>
+      </section>
+
+      <!--
+      <section>
+        <h3>Posting dynamics using temporal point processes</h3>
+        <div class="stretch v-spread">
+          <img class="width-50" src="../img/when-to-post-problem-dynamics.svg" alt="">
+          <p>Primer on temporal point processes.</p>
+        </div>
+      </section>
+      -->
+
+      <section>
+        <section>
+          <h3>Temporal point processes</h3>
+          <img src="../img/lambda_t_only.png" class="width-50">
+          <ul>
+            <li>Will model <em>rate</em> of posting.</li>
+            <li class="fragment">\( \mathbb{E} [ {\color{other} dM(t) } ] = \mathbb{P} [{\color{other} dM(t)} = 1] = \lambda^{*}(t)dt \)</li>
+            <li class="fragment">Can be cyclic, bursty, etc.</li>
+          </ul>
+          <!--
+          <p class="fragment">
+            $$
+            \mathbb{E} [ {\color{other} dM(t) } ] = \lambda^{*}(t)dt\\
+            {\color{other} dM(t)} \in \{ 0, 1 \}
+            $$
+          </p>
+          -->
+
+        </section>
+
+        <section data-transition="fade-out">
+          <h3>Posting dynamics using temporal point processes</h3>
+          <div class="stretch v-spread">
+            <img src="../img/when-to-post-problem-dynamics.svg" alt="" class="width-50">
+            <p class="invisible">
+              <span class="other">Other broadcasters</span> can be bursty with time varying rates, which we cannot control.
+              \( d\lambda(t) = \left[\lambda_0'(t)+w \lambda_0(t) -w \lambda(t)\right]dt + \alpha \, \color{other} dM(t) \)
+            </p>
+          </div>
+        </section>
+
+        <section data-transition="fade-in fade-out">
+          <h3>Posting dynamics using temporal point processes</h3>
+          <div class="stretch v-spread">
+            <img src="../img/when-to-post-others.svg" alt="" class="width-50">
+            <p>
+              <span class="other">Other broadcasters</span> can be bursty with time varying rates, which we cannot control.
+              \( \lambda^*(t) = \lambda_0(t) + \alpha \int_{0}^{t} e^{-w (t - s)} {\color{other} dM(s)} \)
+            </p>
+          </div>
+        </section>
+
+        <section data-transition="fade-in fade-out">
+          <h3>Posting dynamics using temporal point processes</h3>
+          <div class="stretch v-spread">
+            <img src="../img/when-to-post-others.svg" alt="" class="width-50">
+            <p>
+              <span class="other">Other broadcasters</span> can be bursty with time varying rates, which we cannot control.
+              \( d\lambda(t) = \left[\lambda_0'(t)+w \lambda_0(t) -w \lambda(t)\right]dt + \alpha \, \color{other} dM(t) \)
+            </p>
+          </div>
+
+          <!-- <p class="fragment">May change at any point?</p>
+          <p class="fragment">Online algorithm works best</p>
+          <p class="fragment"><span class="red-queen">RedQueen</span> does not need to infer <em>any</em> at all!</p> -->
+        </section>
+
+        <section data-transition="fade-in fade-out">
+          <h3>Posting dynamics using temporal point processes</h3>
+          <div class="stretch v-spread">
+            <img src="../img/when-to-post-others.svg" alt="" class="width-50">
+            <p>
+              <span class="other">Other broadcasters</span> can be bursty with time varying rates, which we cannot control.<br/>
+              <span class="green">Will not need parameter estimation at all!</span>
+
+            </p>
+          </div>
+        </section>
+
+        <section data-transition="fade-in">
+          <h3>Posting dynamics using temporal point processes</h3>
+          <div class="stretch v-spread">
+            <img src="../img/when-to-post-control.svg" alt="" class="width-50">
+            <p>We would like to <em>control</em> <span class="us">our</span> rate of posting \( u(t) \) to minimize \( r(t) \).<br/>
+              \( u(t) = ??? \)
+            </p>
+          </div>
+        </section>
+      </section>
+
+      <section>
+        <section>
+          <h3>Loss function</h3>
+          <ul>
+            <li>Minimize \( r(t) \) over \( [0, T] \).</li>
+            <ul class="fragment">
+              <li>Leads to a trivial solution!</li>
+            </ul>
+            <li class="fragment">Minimize \( u(t) \) over \( [0, T] \) as well.</li>
+          </ul>
+        </section>
+
+        <section>
+          <h3>Loss function</h3>
+            <div class="eqn-fit">
+            $$
+              \begin{align}
+              \underset{u(0, T]}{\text{minimize}} &
+              \quad \mathbb{E}_{({\color{us}N}, {\color{other}M})(0, T]}\left[
+                    \int_{0}^{T} \left( \frac{1}{2} s \,r^2(\tau) + \frac{1}{2} q\,u^2(\tau) \right) d\tau
+                  \right] \\
+              \text{subject to} & \quad u(t) \geq 0 \quad \forall t \in (0, T]
+              \end{align}
+            $$
+            </div>
+
+            <ul>
+              <li class="fragment">Penalizes both high rank and high posting rate.</li>
+              <li class="fragment">\( s \) and \( q \) are tunable parameters.</li>
+              <li class="fragment">Expectation over all possible future \( \{ {\color{us} N(\cdot)}, {\color{other} M(\cdot)} \} \).</li>
+              <li class="fragment">Leads to an analytical solution!</li>
+              <li class="fragment">Generalizes to
+                <ul>
+                  <li>multiple followers: &nbsp; \( r(t) \rightarrow \vec{r}(t) \), and, </li>
+                  <li>time varying weights: &nbsp; \( s \rightarrow \vec{s}(t) \).</li>
+                </ul>
+            </ul>
+        </section>
+      </section>
+
+      <section>
+        <section>
+          <h3>Problem statement</h3>
+          <div class="eqn-fit">
+            $$
+              \begin{align}
+              \underset{u(0, T]}{\text{minimize}} &
+              \quad \mathbb{E}_{({\color{us}N}, {\color{other}M})(0, T]}\left[
+                    \int_{0}^{T} \left( \frac{1}{2} s \,r^2(\tau) + \frac{1}{2} q\,u^2(\tau) \right) d\tau
+                  \right] \\
+                  \text{subject to} & \quad u(t) \geq 0 \quad \forall t \in (0, T] \\
+                  \\
+                  & {\color{us} N(\cdot)} \sim u(\cdot) \qquad {\color{other} M(t)} \sim \lambda(\cdot)\\
+                  \\
+                  d\lambda(t) &= \left[\lambda_0'(t)+w \lambda_0(t) -w \lambda(t)\right]dt + \alpha \, \color{other} dM(t) \\
+                  dr(t) &= {\color{other} dM(t)} - r(t) {\color{us} dN(t)}
+              \end{align}
+            $$
+          </div>
+        </section>
+
+        <section>
+          <h3>Methodology</h3>
+          <div class="eqn-fit">
+            $$
+              \begin{align}
+              \underset{u(0, T]}{\text{minimize}} &
+              \quad \mathbb{E}_{({\color{us}N}, {\color{other}M})(0, T]}\left[
+                    \int_{0}^{T} \left( \frac{1}{2} s \,r^2(\tau) + \frac{1}{2} q\,u^2(\tau) \right) d\tau
+                  \right] \\
+              \text{subject to} & \quad u(t) \geq 0 \quad \forall t \in (0, T]
+              \end{align}
+            $$
+          </div>
+
+          <ul>
+            <li>Solve it as an optimal control problem:
+              <ul>
+                <li>Compute cost-to-go.</li>
+                <li>Use HJB equation to arrive at a PDE.</li>
+                <li>Propose a solution to the PDE.</li>
+              </ul>
+            </li>
+            <li class="fragment">Please see the paper for details.</li>
+          </ul>
+        </section>
+      </section>
+
+      <section>
+        <section data-transition="fade-in slide-out">
+          <h3>Optimal rate of posting</h3>
+          <div class="class stretch v-spread">
+
+            <!--
+            <div class="shrink-eqn">
+            $$
+              \begin{align}
+              \underset{u(0, T]}{\text{minimize}} &
+              \quad \mathbb{E}_{({\color{us}N}, {\color{other}M})(0, T]}\left[
+                    \int_{0}^{T} \left( \frac{1}{2} s \,r^2(\tau) + \frac{1}{2} q\,u^2(\tau) \right) d\tau
+                  \right] \\
+              \text{subject to} & \quad u(t) \geq 0 \quad \forall t \in (0, T]
+              \end{align}
+            $$
+            </div>
+
+            $$
+            \overbrace{u(t)}^{\text{broadcast intensity}} = \sqrt{s/q}\,\underbrace{r(t)}_{\text{Rank in feed}}
+            $$
+            <ul>
+              <li>Efficient</li>
+              <li>Optimal</li>
+              <li>Simple</li>
+            </ul>
+          -->
+
+          <img class="full-width" src="../img/when-to-post-solution.svg" alt="">
+          <p>For a very general class of behavior of <span class="other">other broadcasters</span>, the optimal <em>rate of posting</em> is \( u^{*}(t) = c \times r(t) \).</p>
+          </div>
+        </section>
+
+        <section data-transition="slide-in fade-out">
+          <h3>\( u^{*}(t) \) to <em>when-to-post</em></h3>
+          <div class="stretch v-spread">
+            <img class="width-50" src="../img/sampling-1.svg" alt="">
+            <p>Since \( u(t) = 0 \), so <span class="us">we</span> do not need to post at all.<br/>&nbsp;</p>
+          </div>
+        </section>
+
+        <section data-transition="fade-in fade-out">
+          <h3>\( u^{*}(t) \) to <em>when-to-post</em></h3>
+          <div class="stretch v-spread">
+            <img class="width-50" src="../img/sampling-2.svg" alt="">
+            <p><span class="us">We</span> take one sample from \( exp(c) \) to determine our <span class="planned-posting-time">next post's time</span>.</p>
+          </div>
+        </section>
+
+        <section data-transition="fade-in fade-out">
+          <h3>\( u^{*}(t) \) to <em>when-to-post</em></h3>
+          <div class="stretch v-spread">
+            <img class="width-50" src="../img/sampling-3.svg" alt="">
+            <p>If <span class="other">other broadcasters</span> post in the <span class="current-time">meanwhile</span>, we may revise our <span class="planned-posting-time">planned posting time</span>.</p>
+          </div>
+        </section>
+
+        <section data-transition="fade-in fade-out">
+          <h3>\( u^{*}(t) \) to <em>when-to-post</em></h3>
+          <div class="stretch v-spread">
+            <img class="width-50" src="../img/sampling-4.svg" alt="">
+            <p>However, we may not update our time if we <span class="planned-posting-time">planned to post</span> was earlier than the new sampled time.</p>
+          </div>
+        </section>
+
+        <section data-transition="fade-in">
+          <h3>\( u^{*}(t) \) to <em>when-to-post</em></h3>
+          <div class="stretch v-spread">
+            <img class="width-50" src="../img/sampling-5.svg" alt="">
+            <p>After <span class="us">we</span> post, we start this process all over again.
+              <div class="fragment">We only need \( O(\text{# posts}) \) samples!</div>
+            </p>
+
+          </div>
+        </section>
+      </section>
+
+      <section>
+        <h3 id="demo-header">
+          Demo
+          <span class="demo-buttons pure-button-group centered sans" aria-label="interactive buttons">
+            <button class="small pure-button button-play js-play">
+              <i class="fa fa-play"></i> Play
+            </button>
+            <button class="small pure-button button-stop js-stop">
+              <i class="fa fa-stop"></i> Stop
+            </button>
+          </span>
+        </h3>
+
+        <p class="metric-control">
+          <span class="js-option option">
+            <input id="avg_rank" type="radio" name="performance_metric" value="avg_rank" class="js-perf-metric">
+            <label for="avg_rank">Rank \( r(t) \)</label>
+          </span>
+          <span class="js-option option">
+            <input id="time_at_top" type="radio" name="performance_metric" value="time_at_top" checked class="js-perf-metric">
+            <label for="time_at_top">Time at top \( \int_{0}^{t} {I}(r(\tau) \lt 1)\, d\tau \)</label>
+          </span>
+        </p>
+
+        <div id="slides-demo" class="stretch">
+          <div class="width-50">
+            <!--
+            <p class="legend">
+              Time at top \( \int_{0}^{t} \mathbb{I}(r(\tau) \lt 1)\, d\tau \)
+            </p>
+            -->
+
+            <div class="long vis-aspect">
+              <svg id="perf-1-vis" width="100%" class="content" viewBox="0 0 300 100"></svg>
+            </div>
+
+            <div class="long vis-aspect">
+              <svg id="perf-2-vis" width="100%" class="content" viewBox="0 0 300 100"></svg>
+            </div>
+          </div>
+
+          <div class="width-50 equal-size">
+            <div class="tall left vis-aspect">
+              <svg class="content" id="feed-1-vis" viewBox="0 0 100 150"></svg>
+            </div>
+            <div class="tall right vis-aspect">
+              <svg id="feed-2-vis" class="content" viewBox="0 0 100 150"></svg>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!--
+      <section>
+        <h3>\( u(t) \) to <em>when-to-post</em></h3>
+        <h4>\( u(t) \) changes only when \( r(t) \) changes</h4>
+        <h5>\( \implies u(t) \) is a sum of Poisson intensities</h4>
+        <div class="stretch">
+          <img src="../img/superposition.svg" alt="" class="full-width">
+        </div>
+      </section>
+
+      <section>
+        <h3>\( u(t) \) to <em>when-to-post</em></h3>
+        <h4>Take one sample per component and compute the minimum</h4>
+        <div class="stretch">
+          <img src="../img/sampling.svg" alt="" class="full-width">
+        </div>
+      </section>
+      -->
+
+      <section>
+        <section>
+          <h3>Synthetic experiment</h3>
+          <h4>Oracle, 1 follower</h4>
+          <div class="stretch">
+            <img src="../img/results-oracle.png" alt="" class="full-width">
+          </div>
+        </section>
+
+        <section>
+          <h3>Synthetic experiments</h3>
+          <h4>Multiple followers</h4>
+          <div class="stretch">
+            <img src="../img/results-multiple.png" alt="" class="full-width">
+          </div>
+        </section>
+      </section>
+
+      <section>
+        <section data-transition="fade-out">
+          <h3>Truthful what-if experiments</h3>
+          <ul class="v-spread">
+            <li>All tweets collected between July 1 - Sept. 1, 2009</li>
+            <li>Social network snapshot from Sept. 2009.</li>
+            <li>Sample 2000 users from the dataset.</li>
+            <li class="fragment">Under truthful <em>what-if</em> conditions.</li>
+          </ul>
+        </section>
+
+        <section data-transition="fade-in fade-out">
+          <h3>Truthful what-if experiments</h3>
+          <div class="stretch v-spread">
+            <img src="../img/true-what-if/init.svg" alt="" class="width-75">
+            <p><span class="us">Our broadcaster</span> with his followers.</p>
+          </div>
+        </section>
+
+        <section data-transition="fade-out fade-in">
+          <h3>Truthful what-if experiments</h3>
+          <div class="no-js-stretch v-spread">
+            <img src="../img/true-what-if/others.svg" alt="" class="width-50">
+            <p>Followers follow <span class="other">other broadcasters</span> as well.</p>
+          </div>
+        </section>
+
+        <section data-transition="fade-out fade-in">
+          <h3>Truthful what-if experiments</h3>
+          <div class="no-js-stretch v-spread">
+            <img src="../img/true-what-if/orig.svg" alt="" class="width-50">
+            <p>Replay of the original tweets of <span class="us">our broadcaster</span>.</p>
+          </div>
+        </section>
+
+        <section data-transition="fade-out fade-in">
+          <h3>Truthful what-if experiments</h3>
+          <div class="no-js-stretch v-spread">
+            <img src="../img/true-what-if/redqueen.svg" alt="" class="width-50">
+            <p><em>What if</em> <span class="us">we</span> were using <span class="red-queen-eval red-queen">RedQueen</span>?</p>
+          </div>
+        </section>
+
+        <section data-transition="fade-in">
+          <h3>Truthful what-if experiments</h3>
+          <div class="no-js-stretch v-spread">
+            <img src="../img/true-what-if/karimi.svg" alt="" class="width-50">
+            <p><em>What if</em> <span class="us">we</span> were using <span class="karimi-eval">Karimi</span>?</p>
+          </div>
+        </section>
+      </section>
+
+      <section>
+        <section>
+          <h3>Results on Real Data</h3>
+          <h4>Under truthful what-if conditions</h4>
+
+          <!--
+          <p>
+            We play back tweets on walls of followers and replace the <span class="us">user's posts</span> with <span class="karimi-eval">Karimi et. al.</span>'s or <span class="red-queen red-queen-eval">RedQueen</span>’s.
+          </p>
+          -->
+
+          <div class="no-js-stretch v-spread">
+            <img src="../img/results-real-users.png" alt="" class="width-75">
+
+            <ul>
+              <li>\( 72\% \) average drop in rank, lowered for <b>all</b> users</li>
+              <li>\( 3.5\times \) more time at top, increased for \( 99.1\% \) users</li>
+            </ul>
+          </div>
+        </section>
+
+        <section>
+          <h3>Time varying \( s(t) \)</h3>
+          <div class="">
+            <img class="width-75" src="../img/retweets-per-weekday.png" alt="">
+            <p>Retweets per day.</p>
+          </div>
+        </section>
+
+        <section>
+          <h3>Example user</h3>
+          <h4>Time varying \( s(t) \)</h4>
+          <img class="full-width" src="../img/results-one-user.png" alt="">
+        </section>
+      </section>
+
+    <!--
+    <section>
+      <h3>Results</h3>
+      <h4>Average rank</h4>
+      <div class="stretch v-spread">
+        <img class="full-width" src="../img/results-real-users-average-rank.png" alt="">
+          <p>\( 72\% \) average drop in rank, lowered for <b>all</b> users</p>
+      </div>
+    </section>
+    -->
+
+      <section>
+        <h3>Conclusion</h3>
+
+        <div class="no-js-stretch h-spread">
+          <div class="left-aligned">
+            <p><span class="red-queen">RedQueen</span>:</p>
+            <ul>
+              <li>solves the <em>when-to-post</em> problem,</li>
+              <li>is surprisingly simple, online, and,</li>
+              <li>beats the current state of the art.</li>
+            </ul>
+          </div>
+
+          <div class="eqn-fit">
+            \( u(t) = c r(t) \)
+          </div>
+        </div>
+
+        <div class="h-spread no-js-stretch">
+          <div class="fragment">
+            <h4>Future work</h3>
+            <ul>
+              <li>Algorithmic feeds.</li>
+              <li>Other cost functions.</li>
+              <li>Multiple <span class="red-queen">RedQueen</span> users.</li>
+            </ul>
+          </div>
+
+          <div class="fragment">
+            <p class=>Questions?</p>
+            <div class="footer">
+              <p>Utkarsh Upadhyay</p>
+              <p><a href="mailto:utkarshu@mpi-sws.org"><code>utkarshu@mpi-sws.org</code></a></p>
+              <!-- <p><a href="http://bit.ly/RedQueen-demo"><code>bit.ly/RedQueen-demo</code></a></p> -->
+              <p><a href="http://learning.mpi-sws.org/redqueen/"><code>learning.mpi-sws.org/redqueen</code></a></p>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!--
+      <section>
+        <h3>Future work</h3>
+        <ul>
+          <li>Algorithmic feeds</li>
+          <li>Direct optimisation for top-k</li>
+          <li>Multiple broadcasters using <span class="red-queen">RedQueen</span></li>
+        </ul>
+
+        <div class="fragment full-width">
+          <p class=>Questions?</p>
+          <div class="footer">
+            <p>Utkarsh Upadhyay</p>
+            <p><a href="mailto:utkarshu@mpi-sws.org">utkarshu@mpi-sws.org</a></p>
+            <p><a href="http://learning.mpi-sws.org/redqueen/"><span class="red-queen">RedQueen</span> webpage with demo</a></p>
+          </div>
+        </div>
+      </section>
+      -->
+
+    </div>
+  </div>
+
+  <script src="lib/js/head.min.js"></script>
+  <script src="js/reveal.js"></script>
+
+  <script>
+    // More info https://github.com/hakimel/reveal.js#configuration
+    Reveal.initialize({
+      history: true,
+      math: {
+        mathjax: 'MathJax/MathJax.js',
+        config: 'TeX-AMS_SVG'
+      },
+
+      // More info https://github.com/hakimel/reveal.js#dependencies
+      dependencies: [
+        { src: 'plugin/markdown/marked.js' },
+        { src: 'plugin/markdown/markdown.js' },
+        { src: 'plugin/notes/notes.js', async: true },
+        { src: 'plugin/math/math.js', async: true },
+        { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+      ]
+    });
+  </script>
+  <script>
+    window.DATA_SOURCE = '../data/example2.json';
+  </script>
+  <script src="../js/main.js"></script>
+  <script>
+    window.set_performance('time_at_top');
+  </script>
+</body>
+</html>
